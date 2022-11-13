@@ -1,0 +1,40 @@
+.wrapper {
+    width: 30rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.wrapper.medium {
+    width: 20%;
+}
+
+.wrapper img {
+    width: 100%;
+}
+
+.price {
+    padding: 1.2rem;
+    font-weight: 700;
+}
+
+.price-new {
+    padding-right: 1.6rem;
+    color: var(--primary);
+}
+
+.price-old {
+    padding-left: 1.6rem;
+    color: #bebebe;
+    text-decoration: line-through;
+}
+
+.wrapper button {
+    background-color: var(--primary);
+    color: var(--white);
+    font-weight: 700;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 5rem;
+    font-size: 2rem;
+}

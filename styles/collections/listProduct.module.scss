@@ -1,0 +1,33 @@
+.list-product {
+    margin: 0.8rem 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+}
+
+.pagination {
+    margin-top: 3.2rem;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+
+    & .page-num {
+        padding: 0.8rem 1.5rem;
+        cursor: pointer;
+        border-radius: 4px;
+        font-weight: 500;
+
+        &:hover {
+            background-color: #c83548;
+            color: var(--white);
+        }
+    }
+}
+
+.active {
+    background-color: #c83548;
+    color: var(--white);
+    border-radius: 4px;
+}

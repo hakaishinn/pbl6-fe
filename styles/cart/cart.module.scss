@@ -1,0 +1,116 @@
+.cart-title {
+    font-weight: 500;
+    color: #333;
+    text-align: center;
+}
+
+.cart-number {
+    font-size: 2.2rem;
+    color: #333;
+    margin: 1.6rem 0;
+
+    & span {
+        color: #58b3f0;
+    }
+}
+.cart-table {
+    color: #333;
+
+    & table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    & table,
+    th,
+    td {
+        border: 1px solid;
+        text-align: center;
+    }
+
+    & th {
+        padding: 0.5rem 1rem;
+    }
+
+    & td {
+        padding: 1rem;
+    }
+
+    & .image {
+        width: 16rem;
+        border-right-color: transparent;
+        & img {
+            width: 15rem;
+            object-fit: cover;
+        }
+    }
+
+    & .info {
+        text-align: left;
+        font-size: 1.6rem;
+        font-weight: 700;
+        text-transform: uppercase;
+
+        & a {
+            text-decoration: none;
+            color: #333;
+
+            &:hover {
+                color: #f3652a;
+            }
+        }
+    }
+
+    & .price {
+        & span {
+            color: #e20004;
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+    }
+
+    & .delete {
+        border: none;
+        background-color: transparent;
+        color: #333;
+        cursor: pointer;
+
+        &:hover {
+            color: #dc3545;
+        }
+    }
+}
+
+.cart-bottom {
+    margin: 1.6rem 0;
+    text-align: right;
+}
+
+.total-money {
+    font-size: 2.4rem;
+    color: #333;
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+
+    & span {
+        color: #e20004;
+    }
+}
+
+.btn {
+    background-color: #333;
+    color: var(--white);
+    padding: 1.2rem 3.2rem;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 3.2rem;
+    
+    &:last-child{
+        margin-left: 0.8rem;
+    }
+
+    &:hover{
+        background-color: #007bff;
+    }
+}

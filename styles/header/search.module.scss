@@ -1,0 +1,33 @@
+.search{
+    height: 50px;
+    width: 500px;
+    border: 1px solid #cdcfd0;
+    padding: 0 0.2rem 0 1.6rem;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.search input{
+    height: 100%;
+    width: 100%;
+    outline: none;
+    border: none;
+    font-size: 1.4rem;
+    padding-right: 8px;
+}
+
+.btn-search{
+    width: 20%;
+    height: 90%;
+    background-color: var(--primary);
+    color: var(--white);
+    outline: none;
+    border: none;
+    border-radius: 1rem;
+    cursor: pointer;
+}
+
+.search-icon{
+    height: 100%;
+}

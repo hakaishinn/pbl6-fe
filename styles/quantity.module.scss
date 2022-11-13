@@ -1,0 +1,23 @@
+.quantity-btn {
+    font-size: 1.4rem;
+    display: inline-block;
+    background-color: #f9f9f9;
+    border: 1px solid #dcdcdc;
+
+    & button {
+        width: 3.2rem;
+        height: 3.2rem;
+        border: none;
+        cursor: pointer;
+        background-color: #dadada;
+    }
+
+    & input {
+        background-color: #f9f9f9;
+        display: inline-block;
+        text-align: center;
+        border: none;
+        outline: none;
+        width: 6rem;
+    }
+}

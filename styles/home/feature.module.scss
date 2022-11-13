@@ -1,0 +1,130 @@
+.featured-title {
+    text-align: center;
+
+    & h2 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        line-height: 21px;
+        color: #444;
+        text-transform: uppercase;
+        padding-bottom: 50px;
+        background: url('/images/icon_featured.png') bottom 5px center no-repeat;
+    }
+
+    & p {
+        font-size: 14px;
+        line-height: 17px;
+        font-weight: 300;
+        font-style: italic;
+        color: #848383;
+    }
+}
+.content {
+    box-shadow: inset 0px 0px 4px 0px #dedede;
+}
+
+.featured {
+    padding: 7rem 0;
+}
+
+.list-product {
+    margin-top: 3rem;
+}
+
+.prev-slick {
+    position: absolute;
+    top: 50%;
+    left: 25px;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 2;
+    width: 50px;
+    height: 50px;
+    color: var(--white);
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+}
+
+.next-slick {
+    position: absolute;
+    top: 50%;
+    right: 25px;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 2;
+    width: 50px;
+    height: 50px;
+    color: var(--white);
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+}
+
+//partner
+
+.partner {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    color: #333;
+    gap: 3rem;
+}
+
+.vietnam-post,
+.grab,
+.ghn {
+}
+
+.partner-content {
+    text-align: center;
+
+    & > div {
+        background-color: #f7f7f7;
+        padding: 8rem 1.5rem 1.5rem 1.5rem;
+        margin-top: -9rem;
+    }
+
+    & img {
+        margin-bottom: 2.5rem;
+    }
+
+    & p {
+        text-align: justify;
+    }
+
+    & h4 {
+        margin: 1rem 0;
+        color: #c83548;
+        font-size: 18px;
+        font-weight: 700;
+    }
+}

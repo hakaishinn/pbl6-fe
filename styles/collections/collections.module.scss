@@ -1,0 +1,37 @@
+.content {
+    display: flex;
+    gap: 3rem;
+}
+
+.sidebar{
+    flex: 1;
+}
+//group product
+.group-product {
+    flex: 3;
+    padding: 1.5rem;
+}
+
+.title {
+    margin: 0;
+    font-size: 2rem;
+    color: #333;
+    display: inline-block;
+    font-weight: 500;
+}
+
+.sort{
+    display: flex;
+    justify-content: flex-end;
+    font-size: 1.5rem;
+    color: #333;
+
+    & span {
+        margin-right: 0.5rem;
+    }
+
+    & select {
+        font-size: 1.4rem;
+    }
+}
+

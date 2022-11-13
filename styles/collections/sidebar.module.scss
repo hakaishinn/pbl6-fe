@@ -1,0 +1,70 @@
+$bgColor-title: #d80027;
+$textColor: #f3652a;
+
+.wrapper{
+    margin-top: 0.8rem;
+}
+
+.title{
+    padding: 1.5rem;
+    color: var(--white);
+    background-color: $bgColor-title;
+
+    & h2 {
+        font-size: 1.4rem;
+        font-weight: 500;
+        line-height: 1.5rem;
+    }
+
+}
+
+.category-list{
+    & .category-item{
+        list-style: none;
+        width: 100%;
+        padding: 0.5rem 1.5rem;
+        cursor: pointer;
+        font-size: 1.5rem;
+
+        &:hover a {
+            color: $textColor;
+        }
+
+        & a {
+            text-decoration: none;
+            color: #333;
+            width: 100%;
+        }
+    }
+}
+
+//filter
+.brand{
+    padding-left: 1.5rem;
+}
+.sub-title {
+    font-size: 1.8rem;
+    margin: 1rem 0;
+}
+
+.brand-item{
+    font-size: 1.5rem;
+    margin-bottom: 0.8rem;
+
+    & input{
+        margin-right: 0.8rem;
+    }
+}
+
+.price{
+    padding-left: 1.5rem;
+}
+
+.price-item{
+    font-size: 1.5rem;
+    margin-bottom: 0.8rem;
+
+    & input{
+        margin-right: 0.8rem;
+    }
+}
