@@ -1,13 +1,16 @@
-import Home from "../components/home";
+import Home from '../components/home';
+import * as productsServices from '/services/productsServices';
 
-function HomePage({products}) {
-    return ( <Home products={products}></Home> );
+function HomePage() {
+    return <Home></Home>;
 }
 
-export async function getServerSideProps() {
-    const res_products = await fetch(`http://localhost:4000/products`); // Using `restcountries.com` as `restcountries.eu` is no longer accessible
-    const data_products = await res_products.json();
+// export async function getServerSideProps() {
+//     const productsFull = await productsServices.getProductByCategoryId(5 ,{ page: 1, size: 12 });
+//     const productsNew = await productsServices.getProductsNew({ size: 12 });
 
-    return { props: { products: data_products } };
-}
+//     const gift = await productsServices.getProductByCategoryId(6 ,{ page: 1, size: 12 });
+
+//     return { props: { productsFull: productsFull.data.data, gifts: gift.data.data, productsNew: productsNew }};
+// }
 export default HomePage;

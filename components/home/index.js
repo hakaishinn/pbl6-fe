@@ -5,8 +5,9 @@ import 'slick-carousel/slick/slick-theme.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvira } from '@fortawesome/free-brands-svg-icons';
 
+import * as productsServices from '/services/productsServices';
+
 import styles from '/styles/home/home.module.scss';
-import CallApi from '/utils/callApi';
 import {
     ArrowNextIcon,
     ArrowPrevIcon,
@@ -40,17 +41,39 @@ function NextArrow(props) {
     );
 }
 
-export default function Home({products}) {
+export default function Home() {
     const settings = {
         infinite: true,
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: true,
         speed: 500,
-        pauseOnHover: true,
+        pauseOnHover: false,
         prevArrow: <PrevArrow></PrevArrow>,
         nextArrow: <NextArrow></NextArrow>,
     };
+
+    const [productsFull, setProductsFull] = useState([])
+    const [gifts, setGifts] = useState([])
+    const [productsNew, setProductsNew] = useState([])
+
+    useEffect(() => {
+        const getData = async () => {
+            const productsNew = await productsServices.getProductsNew({ size: 12 });
+            if(productsNew && productsNew.length > 0){
+                setProductsNew(productsNew)
+            }
+            const productsFull = await productsServices.getProductByCategoryId(5, { page: 1, size: 12 });
+            if(productsFull && productsFull.data && productsFull.data.data && productsFull.data.data.length > 0){
+                setProductsFull(productsFull.data.data)
+            }
+            const gifts = await productsServices.getProductByCategoryId(6, { page: 1, size: 12 });
+            if(gifts && gifts.data && gifts.data.data && gifts.data.data.length > 0){
+                setGifts(gifts.data.data)
+            }
+        };
+        getData();
+    }, []);
 
     return (
         <DefaultLayout>
@@ -96,8 +119,12 @@ export default function Home({products}) {
                     </div>
                 </div>
             </div>
-            <Feature data={products} title="Sắp phát hành" subTitle="Cùng tìm hiểu sách mới nhất của chúng tôi"></Feature>
-            <Feature data={products} title="Mới nhất trong tuần" subTitle="Danh sách được cập nhật tự động trong 24h"></Feature>
+            <Feature
+                data={productsNew}
+                title="Sản phẩm mới nhất"
+                subTitle="Danh sách sản phẩm mới nhất của chúng tôi"
+            ></Feature>
+            <Feature data={productsFull} title="Truyện nguyên bộ" subTitle="Mua nguyên bộ để nhận ưu đãi sốc"></Feature>
             <div className={cx('collection-count')}>
                 <div className="container">
                     <div className={cx('collection-row')}>
@@ -143,8 +170,12 @@ export default function Home({products}) {
                     </div>
                 </div>
             </div>
-            <Feature data={products} title="Vật phẩm - Quà tặng" subTitle="Nhanh tay chọn lựa những sản phẩm đang giảm giá"></Feature>
-            <Feature data={products} isProduct={false} title="Đối tác vận chuyển"></Feature>
+            <Feature
+                data={gifts}
+                title="Vật phẩm - Quà tặng"
+                subTitle="Nhanh tay chọn lựa những sản phẩm đang giảm giá"
+            ></Feature>
+            <Feature data={productsFull} isProduct={false} title="Đối tác vận chuyển"></Feature>
             <div className={cx('services')}>
                 <div className="container">
                     <div className={cx('services-row')}>

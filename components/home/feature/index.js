@@ -32,11 +32,11 @@ function Feature({ title, subTitle, isProduct = true, data = [] }) {
         infinite: true,
         slidesToShow: 5,
         swipeToSlide: true,
+        speed: 1500,
         prevArrow: <PrevArrow></PrevArrow>,
         nextArrow: <NextArrow></NextArrow>,
     };
     const classBoxShadow = cx('content');
-
     return (
         <div className={isProduct ? classBoxShadow : ''}>
             <div className="container">
@@ -50,10 +50,7 @@ function Feature({ title, subTitle, isProduct = true, data = [] }) {
                         {isProduct ? (
                             <Slider {...settings}>
                                 {data.map((product) => (
-                                    <Product
-                                    key={product.id}
-                                        data = {product}
-                                    ></Product>
+                                    <Product key={product.idProduct} product={product}></Product>
                                 ))}
                             </Slider>
                         ) : (

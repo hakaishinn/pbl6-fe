@@ -1,5 +1,6 @@
 import classNames from 'classnames/bind';
 import HeadlessTippy from '@tippyjs/react/headless';
+import Link from 'next/link';
 
 import styles from '/styles/header/header.module.scss';
 import Search from './Search';
@@ -7,12 +8,17 @@ import {UserIcon } from '../Icons';
 import { useContext } from 'react';
 import { AppContext } from '/context/appProvider.js';
 import Cart from './cart';
-import Link from 'next/link';
 
 const cx = classNames.bind(styles);
-const user = false;
+
 function Header() {
-    const { setIsShowLogin } = useContext(AppContext);
+    const { setIsShowLogin, user, setUser, setQuantityCart} = useContext(AppContext);
+
+    const handleLogout = () => {
+        localStorage.removeItem("userToken");
+        setUser(null)
+        setQuantityCart(0)
+    }
     return (
         <div className={cx('header')}>
             <div className="container">
@@ -31,16 +37,14 @@ function Header() {
                                 render={(attrs) => (
                                     <div className={cx('sub-account')} tabIndex="-1" {...attrs}>
                                         <ul>
-                                            {user ? (
+                                            { user ? (
                                                 <>
                                                     <li className={cx('sub-account-item')}>
                                                         <button>Tài khoản của tôi</button>
                                                     </li>
+                                                    
                                                     <li className={cx('sub-account-item')}>
-                                                        <button>Danh sách địa chỉ</button>
-                                                    </li>
-                                                    <li className={cx('sub-account-item')}>
-                                                        <button>Đăng xuất</button>
+                                                        <button onClick={handleLogout}>Đăng xuất</button>
                                                     </li>
                                                 </>
                                             ) : (
@@ -62,7 +66,7 @@ function Header() {
                                     <div className={cx('border')}>
                                         <UserIcon className={cx('icon')}></UserIcon>
                                     </div>
-                                    <p>Tài khoản</p>
+                                    <p>{user ? user.name : 'Tài khoản'}</p>
                                 </div>
                             </HeadlessTippy>
                         </div>

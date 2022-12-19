@@ -1,0 +1,26 @@
+.header{
+    font-size: 2rem;
+    padding: 1.6rem 0;
+}
+
+.color{
+    color: #ff6600;
+    font-weight: 700;
+}
+
+.title{
+    font-size: 2rem;
+    color: #ff6600;
+}
+
+.content{
+    margin-bottom: 1.2rem;
+    text-align: justify;
+
+    &:last-child{
+        margin-bottom: 5rem;
+    }
+    & ul > li {
+        list-style: disc inside;
+    }
+}

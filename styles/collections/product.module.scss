@@ -51,6 +51,7 @@
 
     & span:last-child{
         font-weight: 500;
+        font-size: 1.4rem;
         color: #333;
         text-decoration: line-through;
         margin-left: 0.8rem;
@@ -75,5 +76,16 @@
             color: #f3652a;
             border-color: #f3652a;
         }
+    }
+}
+
+.sub-name{
+    width: auto;
+    & span{
+        font-size: 1.2rem;
+        color: #333;
+        background-color: var(--white);
+        border: 1px solid #333;
+        padding: 0.2rem 0.4rem;
     }
 }

@@ -1,24 +1,29 @@
-import { createContext, useState } from 'react';
-import Login from '../components/login';
-import Register from '../components/register';
+import { createContext, useEffect, useState } from 'react';
 
 export const AppContext = createContext();
 
-function AppProvider({children}) {
-    const [isShowLogin, setIsShowLogin] = useState(false)
-    const [isShowRegister, setIsShowRegister] = useState(false)
-    return ( 
-        <AppContext.Provider value={{
-            isShowLogin,
-            setIsShowLogin,
-            isShowRegister,
-            setIsShowRegister
-        }}>
+function AppProvider({ children }) {
+    const [isShowLogin, setIsShowLogin] = useState(false);
+    const [isShowRegister, setIsShowRegister] = useState(false);
+    const [quantityCart, setQuantityCart] = useState(0);
+    const [user, setUser] = useState(null);
+
+    return (
+        <AppContext.Provider
+            value={{
+                isShowLogin,
+                setIsShowLogin,
+                isShowRegister,
+                setIsShowRegister,
+                quantityCart,
+                setQuantityCart,
+                user,
+                setUser,
+            }}
+        >
             {children}
-            {isShowLogin && (<Login></Login>)}
-            {isShowRegister && <Register></Register>}
         </AppContext.Provider>
-     );
+    );
 }
 
 export default AppProvider;

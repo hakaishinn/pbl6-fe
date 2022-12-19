@@ -1,0 +1,119 @@
+.wrapper {
+    position: fixed;
+    bottom: 1.6rem;
+    right: 2rem;
+}
+
+.message {
+    width: 4rem;
+    height: 4rem;
+    cursor: pointer;
+    position: relative;
+    margin: 5rem 0;
+
+    & a::before {
+        content: '';
+        width: 8.5rem;
+        height: 8.5rem;
+        background-color: #9da6fc;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border-radius: 50%;
+        opacity: 0.8;
+        animation: border-animation 2s ease infinite;
+    }
+
+    & .image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: relative;
+    }
+}
+
+@keyframes border-animation {
+    0% {
+        transform: translate(-50%, -50%) scale(0.6);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0.7;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0;
+    }
+}
+
+.message.zalo {
+    & a::before {
+        content: '';
+        width: 8.5rem;
+        height: 8.5rem;
+        background-color: #6bc6f7;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border-radius: 50%;
+        opacity: 0.8;
+        animation: border-animation 2s ease infinite;
+    }
+}
+
+.message.phone {
+    & img {
+        animation: rotate_phone 1.5s infinite;
+    }
+    & a::before {
+        content: '';
+        width: 8.5rem;
+        height: 8.5rem;
+        background-color: rgb(253, 103, 103);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border-radius: 50%;
+        opacity: 0.8;
+        animation: border-animation 2s ease infinite;
+    }
+}
+
+@keyframes rotate_phone {
+    0% {
+        transform: rotate(0deg);
+    }
+    10% {
+        transform: rotate(40deg);
+    }
+    20% {
+        transform: rotate(0deg);
+    }
+    30% {
+        transform: rotate(40deg);
+    }
+    40% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(40deg);
+    }
+}
+
+.scrollToTop {
+    border: 1px solid #333;
+    background-color: var(--white);
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    & svg {
+        width: 1.6rem;
+        height: 1.6rem;
+    }
+}

@@ -1,17 +1,34 @@
 import classNames from 'classnames/bind';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 
 import { CloseIcon } from '../Icons';
 import styles from '/styles/register.module.scss';
 import { AppContext } from '/context/appProvider.js';
+import * as authServices from '/services/authServices';
 
 const cx = classNames.bind(styles);
 
 function Register() {
+    const [registerUser, setRegisterUser] = useState({
+        username: '',
+        password : '',
+        name : '',
+        email : ''
+    });
     const { setIsShowLogin, setIsShowRegister } = useContext(AppContext);
+
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        const data = await authServices.register(registerUser)
+        if(data.status === 'Success'){
+            setIsShowRegister(false)
+            setIsShowLogin(true)
+        }
+    };
+
     return (
         <div className={cx('overlay')} onClick={() => setIsShowRegister(false)}>
-            <div className={cx('form-register')} onClick={(e) => e.stopPropagation()}>
+            <form className={cx('form-register')} onClick={(e) => e.stopPropagation()} onSubmit={handleRegister}>
                 <div className={cx('header')}>
                     <div className={cx('header-title')}>
                         <h2>Đăng ký</h2>
@@ -21,36 +38,70 @@ function Register() {
                     </div>
                     <div>
                         <span>Bạn đã có tài khoản? </span>
-                        <button onClick={() => {
-                            setIsShowRegister(false)
-                            setIsShowLogin(true)
-                        }}>Đăng nhập</button>
+                        <button
+                            onClick={() => {
+                                setIsShowRegister(false);
+                                setIsShowLogin(true);
+                            }}
+                        >
+                            Đăng nhập
+                        </button>
                     </div>
                 </div>
                 <div className={cx('form-body')}>
-                <div className={cx('form-input')}>
-                        <label htmlFor="register-first-name">Tên:</label>
+                    <div className={cx('form-input')}>
+                        <label htmlFor="register-username">Username:</label>
                         <br></br>
-                        <input placeholder="Tên" id="register-first-name" autoFocus></input>
+                        <input
+                            placeholder="Username"
+                            id="register-username"
+                            autoFocus
+                            value={registerUser?.username}
+                            onChange={(e) => {
+                                setRegisterUser((prev) => ({ ...prev, username: e.target.value }));
+                            }}
+                        ></input>
                     </div>
                     <div className={cx('form-input')}>
-                        <label htmlFor="register-last-name">Họ:</label>
+                        <label htmlFor="register-name">Tên hiển thị:</label>
                         <br></br>
-                        <input placeholder="Họ" id="register-last-name"></input>
+                        <input
+                            placeholder="Tên hiển thị"
+                            id="register-name"
+                            value={registerUser?.name}
+                            onChange={(e) => {
+                                setRegisterUser((prev) => ({ ...prev, name: e.target.value }));
+                            }}
+                        ></input>
                     </div>
                     <div className={cx('form-input')}>
                         <label htmlFor="register-email">Email:</label>
                         <br></br>
-                        <input placeholder="Email" id="register-email"></input>
+                        <input
+                            placeholder="Email"
+                            id="register-email"
+                            value={registerUser?.email}
+                            onChange={(e) => {
+                                setRegisterUser((prev) => ({ ...prev, email: e.target.value }));
+                            }}
+                        ></input>
                     </div>
                     <div className={cx('form-input')}>
                         <label htmlFor="register-password">Password:</label>
                         <br></br>
-                        <input placeholder="Mật khẩu" id="register-password"></input>
+                        <input
+                            type="password"
+                            placeholder="Mật khẩu"
+                            id="register-password"
+                            value={registerUser?.password}
+                            onChange={(e) => {
+                                setRegisterUser((prev) => ({ ...prev, password: e.target.value }));
+                            }}
+                        ></input>
                     </div>
                     <button className={cx('btn-register')}>Đăng ký</button>
                 </div>
-            </div>
+            </form>
         </div>
     );
 }

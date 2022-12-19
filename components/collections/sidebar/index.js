@@ -1,17 +1,33 @@
 import classNames from 'classnames/bind';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 
-import CallApi from '/utils/callApi';
 import styles from '/styles/collections/sidebar.module.scss';
+
+import * as categoriesServices from '/services/categoriesServices';
 
 const cx = classNames.bind(styles);
 
-function Sidebar({categories}) {
+function Sidebar() {
+
+    const [categories, setCategories] = useState([]);
+
     function onChangeValue(event) {
-        console.log(event.target.value);
+        const price = event.target.value.split('-')
+        console.log((price[1]));
     }
+
+    useEffect(() => {
+        const getData = async () => {
+            if (categories.length <= 0) {
+                const data_categories = await categoriesServices.getCategories();
+                if (data_categories.length > 0) {
+                    setCategories(data_categories);
+                }
+            }
+        };
+        getData();
+    }, []);
 
     return (
         <div className={cx('wrapper')}>
@@ -23,7 +39,7 @@ function Sidebar({categories}) {
                     <ul>
                         {categories.map((category) => (
                             <li key={category.id} className={cx('category-item')}>
-                                <Link href={`/collections/${category.id}`}>{category.category_type}</Link>
+                                <Link href={`/collections/${category.id}`}>{category.categoryType}</Link>
                             </li>
                         ))}
                     </ul>
@@ -36,18 +52,33 @@ function Sidebar({categories}) {
                 <div className={cx('price')} onChange={onChangeValue}>
                     <h2 className={cx('sub-title')}>Giá</h2>
                     <div className={cx('price-item')}>
-                        <input type={'radio'} id="price1" name="filter-price" value={1}></input>
+                        <input type={'radio'} id="price1" name="filter-price" value={'0-50000'}></input>
                         <label htmlFor="price1">Dưới 50,000đ</label>
                     </div>
 
                     <div className={cx('price-item')}>
-                        <input type={'radio'} id="price2" name="filter-price" value={2}></input>
-                        <label htmlFor="price2">50,000đ - 100,000đ</label>
+                        <input type={'radio'} id="price2" name="filter-price" value={'50000-100000'}></input>
+                        <label htmlFor="price2">Từ 50,000đ - 100,000đ</label>
                     </div>
 
                     <div className={cx('price-item')}>
-                        <input type={'radio'} id="price3" name="filter-price" value={3}></input>
-                        <label htmlFor="price3">Trên 100,000đ</label>
+                        <input type={'radio'} id="price3" name="filter-price" value={'100000-200000'}></input>
+                        <label htmlFor="price3">Từ 100,000đ - 200,000đ</label>
+                    </div>
+
+                    <div className={cx('price-item')}>
+                        <input type={'radio'} id="price4" name="filter-price" value={'200000-300000'}></input>
+                        <label htmlFor="price4">Từ 200,000đ - 300,000đ</label>
+                    </div>
+
+                    <div className={cx('price-item')}>
+                        <input type={'radio'} id="price5" name="filter-price" value={'300000-500000'}></input>
+                        <label htmlFor="price5">Từ 300,000đ - 500,000đ</label>
+                    </div>
+
+                    <div className={cx('price-item')}>
+                        <input type={'radio'} id="price6" name="filter-price" value={'500000-999999999'}></input>
+                        <label htmlFor="price6">Trên 500,000đ</label>
                     </div>
                 </div>
             </div>

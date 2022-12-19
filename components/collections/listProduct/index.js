@@ -1,46 +1,106 @@
 import ReactPaginate from 'react-paginate';
 import classNames from 'classnames/bind';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
-import styles from '/styles/collections/listProduct.module.scss'
+import styles from '/styles/collections/listProduct.module.scss';
 import Product from '../product';
+import * as productsServices from '/services/productsServices';
 
-const cx = classNames.bind(styles)
+const cx = classNames.bind(styles);
 
-function ListProduct({ data }) {
-    const [itemOffset, setItemOffset] = useState(0);
-    const itemsPerPage = 6;
+function ListProduct({ isSearch, data, setData }) {
+    const router = useRouter();
 
-    const endOffset = itemOffset + itemsPerPage;
-    const currentItems = data.slice(itemOffset, endOffset);
-    const pageCount = Math.ceil(data.length / itemsPerPage);
+    const {
+        query: { category_id, name },
+    } = router;
 
-    const handlePageClick = (event) => {
-        const newOffset = (event.selected * itemsPerPage) % data.length;
-        setItemOffset(newOffset);
+    const pageCount = data?.data?.totalPage || 0;
+
+    const handlePageClick = async (event) => {
+        console.log(event.selected);
+        if (isSearch) {
+            if (name) {
+                const data = await productsServices.search(name, {
+                    page: event.selected + 1,
+                    size: 9,
+                });
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth',
+                });
+                setData(data);
+            }
+        } else {
+            if (category_id) {
+                const data = await productsServices.getProductByCategoryId(category_id, {
+                    page: event.selected + 1,
+                    size: 9,
+                });
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth',
+                });
+                setData(data);
+            }
+        }
     };
+
+    useEffect(() => {
+        const loadDataPageOne = async () => {
+            if (isSearch) {
+                if (name) {
+                    const data = await productsServices.search(name, {
+                        page: 1,
+                        size: 9,
+                    });
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth',
+                    });
+                    setData(data);
+                }
+            } else {
+                if (category_id) {
+                    const data = await productsServices.getProductByCategoryId(category_id, {
+                        page: 1,
+                        size: 9,
+                    });
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth',
+                    });
+                    setData(data);
+                }
+            }
+        };
+        loadDataPageOne();
+    }, [category_id, name]);
 
     return (
         <>
             <div className={cx('list-product')}>
-                {currentItems.map(product => (
-                    <Product key={product.id} data={product}></Product>
+                {data?.data?.data?.map((product) => (
+                    <Product key={product.idProduct} product={product}></Product>
                 ))}
             </div>
-            <ReactPaginate
-                breakLabel="..."
-                nextLabel=">"
-                onPageChange={handlePageClick}
-                pageRangeDisplayed={3}
-                pageCount={pageCount}
-                previousLabel="<"
-                renderOnZeroPageCount={null}
-                containerClassName={cx('pagination')}
-                pageLinkClassName={cx('page-num')}
-                previousLinkClassName={cx('page-num')}
-                nextLinkClassName = {cx('page-num')}
-                activeLinkClassName={cx('active')}
-            />
+            {data?.data?.data ? (
+                <ReactPaginate
+                    breakLabel="..."
+                    nextLabel=">"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={3}
+                    pageCount={pageCount}
+                    previousLabel="<"
+                    renderOnZeroPageCount={null}
+                    containerClassName={cx('pagination')}
+                    pageLinkClassName={cx('page-num')}
+                    previousLinkClassName={cx('page-num')}
+                    nextLinkClassName={cx('page-num')}
+                    activeLinkClassName={cx('active')}
+                />
+            ) : undefined}
         </>
     );
 }

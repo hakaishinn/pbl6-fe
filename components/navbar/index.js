@@ -1,9 +1,10 @@
 import classNames from 'classnames/bind';
-import Link from 'next/link';
-import styles from '/styles/navbar.module.scss';
-import HeadlessTippy from '@tippyjs/react/headless';
-import CallApi from '/utils/callApi';
 import { useEffect, useState } from 'react';
+import HeadlessTippy from '@tippyjs/react/headless';
+import Link from 'next/link';
+
+import styles from '/styles/navbar.module.scss';
+import * as categoriesServices from "/services/categoriesServices";
 
 const cx = classNames.bind(styles);
 
@@ -11,9 +12,11 @@ function Navbar() {
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
-        CallApi('categories').then((res) => {
-            setCategories(res.data);
-        });
+        const getCategories = async () => {
+            const result = await categoriesServices.getCategories()
+            setCategories(result)
+        }
+        getCategories()
     }, []);
     return (
         <div className={cx('wrapper')}>
@@ -28,7 +31,7 @@ function Navbar() {
                                 <div className={cx('subnav-homepage')} tabIndex="-1" {...attrs}>
                                     <ul>
                                         <li>
-                                            <Link href="/">Điều khoản sử dụng</Link>
+                                            <Link href="/pages/provision">Điều khoản sử dụng</Link>
                                         </li>
                                     </ul>
                                 </div>
@@ -52,7 +55,7 @@ function Navbar() {
                                     <ul>
                                         {categories.map((category) => (
                                             <li key={category.id}>
-                                                <Link href={`/collections/${category.id}`}>{category.category_type}</Link>
+                                                <Link href={`/collections/${category.id}`}>{category.categoryType}</Link>
                                             </li>
                                         ))}
                                     </ul>
@@ -90,16 +93,16 @@ function Navbar() {
                                 <div className={cx('subnav-homepage')} tabIndex="-1" {...attrs}>
                                     <ul>
                                         <li>
-                                            <Link href="/">Thanh toán</Link>
+                                            <Link href="/pages/pay">Thanh toán</Link>
                                         </li>
                                         <li>
-                                            <Link href="/">Chính sách đổi trả</Link>
+                                            <Link href="/pages/returngoods">Chính sách đổi trả</Link>
                                         </li>
                                         <li>
-                                            <Link href="/">Phí giao hàng</Link>
+                                            <Link href="/pages/deliverycharges">Phí giao hàng</Link>
                                         </li>
                                         <li>
-                                            <Link href="/">Chính sách giao hàng</Link>
+                                            <Link href="/pages/deliverypolicy">Chính sách giao hàng</Link>
                                         </li>
                                     </ul>
                                 </div>

@@ -1,16 +1,18 @@
-import ProductDetail from "../../components/products";
+import ProductDetail from '../../components/products';
+import * as productsServices from "/services/productsServices";
 
-function ProductsPage({product}) {
-    return ( <ProductDetail product={product}></ProductDetail> );
+
+function ProductsPage() {
+    return <ProductDetail></ProductDetail>;
 }
 
-export async function getServerSideProps(context) {
-    const { params } = context;
-    const { id } = params; // Use `context.params` to get dynamic params
-    const res_products = await fetch(`http://localhost:4000/products/${id}`); // Using `restcountries.com` as `restcountries.eu` is no longer accessible
-    const data_products = await res_products.json();
+// export async function getServerSideProps(context) {
+//     const { params } = context;
+//     const { id } = params;
 
-    return { props: { product: data_products } };
-}
+//     const data_products = await productsServices.getProductById(id);
+
+//     return { props: { product: data_products } };
+// }
 
 export default ProductsPage;

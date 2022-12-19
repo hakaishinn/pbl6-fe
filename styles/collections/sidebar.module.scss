@@ -9,6 +9,7 @@ $textColor: #f3652a;
     padding: 1.5rem;
     color: var(--white);
     background-color: $bgColor-title;
+    margin-bottom: 0.8rem;
 
     & h2 {
         font-size: 1.4rem;
@@ -26,7 +27,7 @@ $textColor: #f3652a;
         cursor: pointer;
         font-size: 1.5rem;
 
-        &:hover a {
+        & a:hover {
             color: $textColor;
         }
 
@@ -39,21 +40,9 @@ $textColor: #f3652a;
 }
 
 //filter
-.brand{
-    padding-left: 1.5rem;
-}
 .sub-title {
     font-size: 1.8rem;
     margin: 1rem 0;
-}
-
-.brand-item{
-    font-size: 1.5rem;
-    margin-bottom: 0.8rem;
-
-    & input{
-        margin-right: 0.8rem;
-    }
 }
 
 .price{
@@ -66,5 +55,11 @@ $textColor: #f3652a;
 
     & input{
         margin-right: 0.8rem;
+        cursor: pointer;
+        accent-color: red;
+    }
+
+    & label{
+        cursor: pointer;
     }
 }
