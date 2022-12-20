@@ -1,50 +1,64 @@
-import { useContext } from 'react';
 import classNames from 'classnames/bind';
 import Link from 'next/link';
+import { useContext } from 'react';
+import HeadlessTippy from '@tippyjs/react/headless';
 
-import styles from '/styles/home/product.module.scss';
+import styles from '/styles/collections/product.module.scss';
 import { AppContext } from '/context/appProvider.js';
 import * as cartServices from '/services/cartServices';
 
-
 const cx = classNames.bind(styles);
-
 function Product({ product }) {
-    const newPrice = product.price - product.price * product.discount;
     const { user, setQuantityCart, setIsShowLogin } = useContext(AppContext);
 
+    const newPrice = product ? product.price - product.price * product.discount : 0;
+
     const handleAddToCart = async () => {
-        if(user){
-            await cartServices.addCartItem(product.idProduct, user.idUser, 1)
-            setQuantityCart(prev => prev + 1)
-            alert("Thêm thành công")
+        if (user) {
+            await cartServices.addCartItem(product.idProduct, user.idUser, 1);
+            setQuantityCart((prev) => prev + 1);
+            alert('Thêm thành công');
         } else {
-            setIsShowLogin(true)
+            setIsShowLogin(true);
         }
     };
     return (
         <div className={cx('wrapper')}>
-            <div className="title">
-                <Link href={`/products/${product.idProduct}`} className={cx('name')}>
-                    {product.name}
+            <div className={cx('image')}>
+                <Link href={`/products/${product.idProduct}`}>
+                    <img src={product.image} alt={product.name}></img>
                 </Link>
+            </div>
+            <div className={cx('text')}>
+                <div className={cx('name')}>
+                    <HeadlessTippy
+                        offset={[0, 4]}
+                        placement="top"
+                        render={(attrs) => (
+                            <div className={cx('sub-name')} tabIndex="-1" {...attrs}>
+                                <span>{product.name}</span>
+                            </div>
+                        )}
+                    >
+                        <Link href={`/products/${product.idProduct}`}>{product.name}</Link>
+                    </HeadlessTippy>
+                </div>
                 <div className={cx('price')}>
-                    <p className={cx('new-price')}>
-                        {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(newPrice)}
-                    </p>
-                    <p className={cx('old-price')}>
+                    <span>{`${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
+                        newPrice,
+                    )}`}</span>
+                    <span>
                         {product.price !== newPrice
-                            ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
+                            ? `${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
                                   product.price,
-                              )
+                              )}`
                             : ''}
-                    </p>
+                    </span>
+                </div>
+                <div className={cx('add-to-cart')}>
+                    <button onClick={handleAddToCart}>Thêm vào giỏ</button>
                 </div>
             </div>
-            <Link className={cx('image')} href={`/products/${product.idProduct}`}>
-                <img src={product.image} alt={product.name}></img>
-            </Link>
-            <button onClick={handleAddToCart}>THÊM VÀO GIỎ</button>
         </div>
     );
 }

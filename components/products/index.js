@@ -2,6 +2,7 @@ import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
+import Head from 'next/head';
 
 import styles from '/styles/products/productDetail.module.scss';
 import DefaultLayout from '/layout/defaultLayout';
@@ -11,6 +12,7 @@ import { AppContext } from '/context/appProvider.js';
 
 import * as cartServices from '/services/cartServices';
 import * as productsServices from '/services/productsServices';
+import { LoadingSkeleton } from '../loading';
 
 const cx = classNames.bind(styles);
 
@@ -49,7 +51,6 @@ function ProductDetail() {
         const getData = async () => {
             if (id) {
                 const data_products = await productsServices.getProductById(id);
-                console.log(data_products);
                 if (data_products) {
                     setProduct(data_products);
                 }
@@ -59,100 +60,195 @@ function ProductDetail() {
     }, [id]);
 
     return (
-        <DefaultLayout>
-            {product ? (
+        <>
+            <Head>
+                {product && <title>{product.name} - Hikaru Shop</title>}
+            </Head>
+            <DefaultLayout>
+                (
                 <div className="container">
                     <div className={cx('wrapper')}>
                         <div className={cx('info')}>
-                            <div className={cx('image')}>
-                                <img src={product.image} alt={product.name}></img>
-                            </div>
-                            <div className={cx('information-product')}>
-                                <h1 className={cx('name')}>{product.name}</h1>
-                                <div className={cx('id-product')}>Mã sản phẩm: {product.idProduct}</div>
-                                <div className={cx('save')}>
-                                    Tiết kiệm được: {`${product.discount * 100}%`}
-                                </div>
-                                <div className={cx('price')}>
-                                    <span>
-                                        {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
-                                            newPrice,
-                                        )}
-                                    </span>
-                                    <span>
-                                        {product.price !== newPrice
-                                            ? new Intl.NumberFormat('vi-VN', {
-                                                  style: 'currency',
-                                                  currency: 'VND',
-                                              }).format(product.price || 0)
-                                            : ''}
-                                    </span>
-                                </div>
-                                <div className={cx('quantity')}>
-                                    <div>Số lượng</div>
-                                    <Quantity product={product} parentCallback={getQuantity}></Quantity>
-                                </div>
-                                <button className={cx('btn-buy')} onClick={handleBuy}>
-                                    MUA NGAY
-                                </button>
-                                <button className={cx('add-to-cart')} onClick={handleAddToCart}>
-                                    THÊM VÀO GIỎ
-                                </button>
-                                <div className={cx('endow')}>
-                                    <div>Ưu đãi dành cho khách hàng:</div>
-                                    <ul>
-                                        <li>
-                                            <CheckIcon
-                                                width="14px"
-                                                height="14px"
-                                                className={cx('check-icon')}
-                                            ></CheckIcon>
-                                            Có thể nhận hàng tại shop.
-                                        </li>
-                                    </ul>
-                                    <ul>
-                                        <li>
-                                            <CheckIcon
-                                                width="14px"
-                                                height="14px"
-                                                className={cx('check-icon')}
-                                            ></CheckIcon>
-                                            Giao hàng toàn quốc. Thời gian giao hàng từ 3 - 7 ngày, Tính từ ngày bạn
-                                            nhận được email giao hàng.
-                                        </li>
-                                    </ul>
-                                    <ul>
-                                        <li>
-                                            <CheckIcon
-                                                width="14px"
-                                                height="14px"
-                                                className={cx('check-icon')}
-                                            ></CheckIcon>
-                                            Bọc plastic miễn phí cho Light Novel đặt mua trước ngày phát hành dự kiến.
-                                        </li>
-                                    </ul>
-                                    <ul>
-                                        <li>
-                                            <CheckIcon
-                                                width="14px"
-                                                height="14px"
-                                                className={cx('check-icon')}
-                                            ></CheckIcon>
-                                            Tặng bao bảo vệ cho mọi sản phẩm.
-                                        </li>
-                                    </ul>
-                                    <ul>
-                                        <li>
-                                            <CheckIcon
-                                                width="14px"
-                                                height="14px"
-                                                className={cx('check-icon')}
-                                            ></CheckIcon>{' '}
-                                            Đổi trả trong 15 ngày.
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                            {product ? (
+                                <>
+                                    <div className={cx('image')}>
+                                        <img src={product.image} alt={product.name}></img>
+                                    </div>
+                                    <div className={cx('information-product')}>
+                                        <h1 className={cx('name')}>{product.name}</h1>
+                                        <div className={cx('id-product')}>Mã sản phẩm: {product.idProduct}</div>
+                                        <div className={cx('save')}>Tiết kiệm được: {`${product.discount * 100}%`}</div>
+                                        <div className={cx('price')}>
+                                            <span>
+                                                {new Intl.NumberFormat('vi-VN', {
+                                                    style: 'currency',
+                                                    currency: 'VND',
+                                                }).format(newPrice)}
+                                            </span>
+                                            <span>
+                                                {product.price !== newPrice
+                                                    ? new Intl.NumberFormat('vi-VN', {
+                                                          style: 'currency',
+                                                          currency: 'VND',
+                                                      }).format(product.price || 0)
+                                                    : ''}
+                                            </span>
+                                        </div>
+                                        <div className={cx('quantity')}>
+                                            <div>Số lượng</div>
+                                            <Quantity product={product} parentCallback={getQuantity}></Quantity>
+                                        </div>
+                                        <button className={cx('btn-buy')} onClick={handleBuy}>
+                                            MUA NGAY
+                                        </button>
+                                        <button className={cx('add-to-cart')} onClick={handleAddToCart}>
+                                            THÊM VÀO GIỎ
+                                        </button>
+                                        <div className={cx('endow')}>
+                                            <div>Ưu đãi dành cho khách hàng:</div>
+                                            <ul>
+                                                <li>
+                                                    <CheckIcon
+                                                        width="14px"
+                                                        height="14px"
+                                                        className={cx('check-icon')}
+                                                    ></CheckIcon>
+                                                    Có thể nhận hàng tại shop.
+                                                </li>
+                                            </ul>
+                                            <ul>
+                                                <li>
+                                                    <CheckIcon
+                                                        width="14px"
+                                                        height="14px"
+                                                        className={cx('check-icon')}
+                                                    ></CheckIcon>
+                                                    Giao hàng toàn quốc. Thời gian giao hàng từ 3 - 7 ngày, Tính từ ngày
+                                                    bạn nhận được email giao hàng.
+                                                </li>
+                                            </ul>
+                                            <ul>
+                                                <li>
+                                                    <CheckIcon
+                                                        width="14px"
+                                                        height="14px"
+                                                        className={cx('check-icon')}
+                                                    ></CheckIcon>
+                                                    Bọc plastic miễn phí cho Light Novel đặt mua trước ngày phát hành dự
+                                                    kiến.
+                                                </li>
+                                            </ul>
+                                            <ul>
+                                                <li>
+                                                    <CheckIcon
+                                                        width="14px"
+                                                        height="14px"
+                                                        className={cx('check-icon')}
+                                                    ></CheckIcon>
+                                                    Tặng bao bảo vệ cho mọi sản phẩm.
+                                                </li>
+                                            </ul>
+                                            <ul>
+                                                <li>
+                                                    <CheckIcon
+                                                        width="14px"
+                                                        height="14px"
+                                                        className={cx('check-icon')}
+                                                    ></CheckIcon>{' '}
+                                                    Đổi trả trong 15 ngày.
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className={cx('image')}>
+                                        <LoadingSkeleton className={'image'}></LoadingSkeleton>
+                                    </div>
+                                    <div className={cx('information-product')}>
+                                        <h1 className={cx('name')}>
+                                            <LoadingSkeleton className={'name'}></LoadingSkeleton>
+                                        </h1>
+                                        <div className={cx('id-product')}>
+                                            <LoadingSkeleton className={'id-product'}></LoadingSkeleton>
+                                        </div>
+                                        <div className={cx('save')}>
+                                            <LoadingSkeleton className={'save'}></LoadingSkeleton>
+                                        </div>
+                                        <div className={cx('price')}>
+                                            <span>
+                                                <LoadingSkeleton className={'price'}></LoadingSkeleton>
+                                            </span>
+                                        </div>
+                                        <div className={cx('quantity')}>
+                                            <LoadingSkeleton className={'quantity'}></LoadingSkeleton>
+                                        </div>
+                                        <button className={cx('btn-buy')} onClick={handleBuy}>
+                                            MUA NGAY
+                                        </button>
+                                        <button className={cx('add-to-cart')} onClick={handleAddToCart}>
+                                            THÊM VÀO GIỎ
+                                        </button>
+                                        <div className={cx('endow')}>
+                                            <div>Ưu đãi dành cho khách hàng:</div>
+                                            <ul>
+                                                <li>
+                                                    <CheckIcon
+                                                        width="14px"
+                                                        height="14px"
+                                                        className={cx('check-icon')}
+                                                    ></CheckIcon>
+                                                    Có thể nhận hàng tại shop.
+                                                </li>
+                                            </ul>
+                                            <ul>
+                                                <li>
+                                                    <CheckIcon
+                                                        width="14px"
+                                                        height="14px"
+                                                        className={cx('check-icon')}
+                                                    ></CheckIcon>
+                                                    Giao hàng toàn quốc. Thời gian giao hàng từ 3 - 7 ngày, Tính từ ngày
+                                                    bạn nhận được email giao hàng.
+                                                </li>
+                                            </ul>
+                                            <ul>
+                                                <li>
+                                                    <CheckIcon
+                                                        width="14px"
+                                                        height="14px"
+                                                        className={cx('check-icon')}
+                                                    ></CheckIcon>
+                                                    Bọc plastic miễn phí cho Light Novel đặt mua trước ngày phát hành dự
+                                                    kiến.
+                                                </li>
+                                            </ul>
+                                            <ul>
+                                                <li>
+                                                    <CheckIcon
+                                                        width="14px"
+                                                        height="14px"
+                                                        className={cx('check-icon')}
+                                                    ></CheckIcon>
+                                                    Tặng bao bảo vệ cho mọi sản phẩm.
+                                                </li>
+                                            </ul>
+                                            <ul>
+                                                <li>
+                                                    <CheckIcon
+                                                        width="14px"
+                                                        height="14px"
+                                                        className={cx('check-icon')}
+                                                    ></CheckIcon>{' '}
+                                                    Đổi trả trong 15 ngày.
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+
                             <div className={cx('deliver')}>
                                 <div className={cx('header')}>
                                     <div className={cx('title')}>
@@ -196,40 +292,43 @@ function ProductDetail() {
                                 </div>
                             </div>
                         </div>
-                        <div className={cx('desc-detail')}>
-                            <button className={cx({ active: !isComment })} onClick={() => setIsComment(!isComment)}>
-                                Mô tả chi tiết
-                            </button>
-                            <button className={cx({ active: isComment })} onClick={() => setIsComment(!isComment)}>
-                                Bình luận
-                            </button>
+                        {product ? (
+                            <div className={cx('desc-detail')}>
+                                <button className={cx({ active: !isComment })} onClick={() => setIsComment(!isComment)}>
+                                    Mô tả chi tiết
+                                </button>
+                                <button className={cx({ active: isComment })} onClick={() => setIsComment(!isComment)}>
+                                    Bình luận
+                                </button>
 
-                            <div className={cx('desc-detail-text')}>
-                                {isComment ? (
-                                    <div className={cx('desc-content')}>
-                                        <h3>Bình luận</h3>
-                                        <span>0 bình luận</span>
+                                <div className={cx('desc-detail-text')}>
+                                    {isComment ? (
+                                        <div className={cx('desc-content')}>
+                                            <h3>Bình luận</h3>
+                                            <span>0 bình luận</span>
 
-                                        <div className={cx('comments')}>
-                                            <input placeholder="Viết bình luận"></input>
-                                            <button>Đăng</button>
+                                            <div className={cx('comments')}>
+                                                <input placeholder="Viết bình luận"></input>
+                                                <button>Đăng</button>
+                                            </div>
                                         </div>
-                                    </div>
-                                ) : (
-                                    <div className={cx('desc-content')}>
-                                        {product.desc?.includes(';') ? (
-                                            product.desc.split(';').map((item, index) => <p key={index}>{item}</p>)
-                                        ) : (
-                                            <p>{product.desc}</p>
-                                        )}
-                                    </div>
-                                )}
+                                    ) : (
+                                        <div className={cx('desc-content')}>
+                                            {product.desc?.includes(';') ? (
+                                                product.desc.split(';').map((item, index) => <p key={index}>{item}</p>)
+                                            ) : (
+                                                <p>{product.desc}</p>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                        </div>
+                        ) : undefined}
                     </div>
                 </div>
-            ) : undefined}
-        </DefaultLayout>
+                )
+            </DefaultLayout>
+        </>
     );
 }
 

@@ -1,11 +1,12 @@
 import { useContext } from 'react';
 import classNames from 'classnames/bind';
 import Link from 'next/link';
+import HeadlessTippy from '@tippyjs/react/headless';
+
 
 import styles from '/styles/home/product.module.scss';
 import { AppContext } from '/context/appProvider.js';
 import * as cartServices from '/services/cartServices';
-
 
 const cx = classNames.bind(styles);
 
@@ -14,20 +15,31 @@ function Product({ product }) {
     const { user, setQuantityCart, setIsShowLogin } = useContext(AppContext);
 
     const handleAddToCart = async () => {
-        if(user){
-            await cartServices.addCartItem(product.idProduct, user.idUser, 1)
-            setQuantityCart(prev => prev + 1)
-            alert("Thêm thành công")
+        if (user) {
+            await cartServices.addCartItem(product.idProduct, user.idUser, 1);
+            setQuantityCart((prev) => prev + 1);
+            alert('Thêm thành công');
         } else {
-            setIsShowLogin(true)
+            setIsShowLogin(true);
         }
     };
     return (
         <div className={cx('wrapper')}>
             <div className="title">
-                <Link href={`/products/${product.idProduct}`} className={cx('name')}>
-                    {product.name}
-                </Link>
+                <HeadlessTippy
+                    offset={[0, 0]}
+                    placement="top"
+                    render={(attrs) => (
+                        <div className={cx('sub-name')} tabIndex="-1" {...attrs}>
+                            <span>{product.name}</span>
+                        </div>
+                    )}
+                >
+                    <Link href={`/products/${product.idProduct}`} className={cx('name')}>
+                        {product.name}
+                    </Link>
+                </HeadlessTippy>
+
                 <div className={cx('price')}>
                     <p className={cx('new-price')}>
                         {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(newPrice)}

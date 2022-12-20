@@ -1,5 +1,7 @@
 import classNames from 'classnames/bind';
 import { useEffect, useState, memo } from 'react';
+import Head from 'next/head';
+
 
 import styles from '/styles/collections/collections.module.scss';
 import DefaultLayout from '/layout/defaultLayout';
@@ -28,6 +30,10 @@ function Collections({ isSearch = false }) {
         getData();
     }, []);
     return (
+        <>
+        <Head>
+            {data && <title>{isSearch ? `Keyword:  "${data?.keyword}"` : data?.title ?? null} - Hikaru Shop</title>}
+        </Head>
         <DefaultLayout>
             <div className="container">
                 <div className={cx('content')}>
@@ -52,7 +58,7 @@ function Collections({ isSearch = false }) {
                     </div>
                 </div>
             </div>
-        </DefaultLayout>
+        </DefaultLayout></>
     );
 }
 

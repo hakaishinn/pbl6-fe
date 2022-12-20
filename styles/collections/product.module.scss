@@ -22,21 +22,20 @@
 }
 
 .name {
-    font-size: 1.6rem;
-    font-weight: 700;
-    padding: 0.8rem 0 0 0.8rem;
-    display: -webkit-box;
-    max-height: 3.2rem;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: normal;
-    -webkit-line-clamp: 1;
-    line-height: 1.6rem;
-
+    height: 2rem;
     & a {
         text-decoration: none;
         color: #333;
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-left: 0.8rem;
+        display: -webkit-box;
+        line-height: 2.2rem;
+        overflow: hidden;
+        display: block;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
 
         &:hover {
             color: #f3652a;
@@ -49,7 +48,7 @@
     color: var(--primary);
     font-weight: 700;
 
-    & span:last-child{
+    & span:last-child {
         font-weight: 500;
         font-size: 1.4rem;
         color: #333;
@@ -79,9 +78,9 @@
     }
 }
 
-.sub-name{
-    width: auto;
-    & span{
+.sub-name {
+    width: max-content;
+    & span {
         font-size: 1.2rem;
         color: #333;
         background-color: var(--white);

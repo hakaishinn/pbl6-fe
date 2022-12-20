@@ -5,16 +5,16 @@ import { memo, useEffect, useState } from 'react';
 import styles from '/styles/collections/sidebar.module.scss';
 
 import * as categoriesServices from '/services/categoriesServices';
+import { LoadingSkeleton } from '../../loading';
 
 const cx = classNames.bind(styles);
 
 function Sidebar() {
-
     const [categories, setCategories] = useState([]);
 
     function onChangeValue(event) {
-        const price = event.target.value.split('-')
-        console.log((price[1]));
+        const price = event.target.value.split('-');
+        console.log(price[1]);
     }
 
     useEffect(() => {
@@ -37,11 +37,15 @@ function Sidebar() {
                 </div>
                 <div className={cx('category-list')}>
                     <ul>
-                        {categories.map((category) => (
-                            <li key={category.id} className={cx('category-item')}>
-                                <Link href={`/collections/${category.id}`}>{category.categoryType}</Link>
-                            </li>
-                        ))}
+                        {categories.length === 0
+                            ? Array(6)
+                                  .fill(0)
+                                  .map((item, index) => <LoadingSkeleton key={index} className={'category'}></LoadingSkeleton>)
+                            : categories.map((category) => (
+                                  <li key={category.id} className={cx('category-item')}>
+                                      <Link href={`/collections/${category.id}`}>{category.categoryType}</Link>
+                                  </li>
+                              ))}
                     </ul>
                 </div>
             </div>

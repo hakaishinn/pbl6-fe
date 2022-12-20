@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import styles from '/styles/collections/listProduct.module.scss';
 import Product from '../product';
 import * as productsServices from '/services/productsServices';
+import { LoadingSkeleton } from '../../loading';
 
 const cx = classNames.bind(styles);
 
@@ -81,9 +82,11 @@ function ListProduct({ isSearch, data, setData }) {
     return (
         <>
             <div className={cx('list-product')}>
-                {data?.data?.data?.map((product) => (
-                    <Product key={product.idProduct} product={product}></Product>
-                ))}
+                {!data
+                    ? Array(6)
+                          .fill(0)
+                          .map((item, index) => <LoadingSkeleton key={index} className={'collection-product'}></LoadingSkeleton>)
+                    : data?.data?.data?.map((product) => <Product key={product.idProduct} product={product}></Product>)}
             </div>
             {data?.data?.data ? (
                 <ReactPaginate

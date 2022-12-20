@@ -6,6 +6,7 @@ import styles from '/styles/cart/cart.module.scss';
 import Quantity from '/components/quantity';
 import { AppContext } from '/context/appProvider.js';
 import * as cartServices from '/services/cartServices';
+import { LoadingSkeleton } from '../loading';
 
 const cx = classNames.bind(styles);
 function Cart() {
@@ -75,7 +76,7 @@ function Cart() {
                             <div className={cx('cart-number')}>
                                 Bạn đang có <span>{quantityCart} sản phẩm</span> trong giỏ hàng.
                             </div>
-                            {data && (
+                            {data?.length > 0 ? (
                                 <table>
                                     <thead>
                                         <tr>
@@ -151,6 +152,48 @@ function Cart() {
                                                     </td>
                                                 </tr>
                                             ))}
+                                    </tbody>
+                                </table>
+                            ) : (
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th width="50%" colSpan={2}>
+                                                Sản phẩm
+                                            </th>
+                                            <th width="15%">Đơn giá</th>
+                                            <th width="15%">Số lượng</th>
+                                            <th width="15%">Thành tiền</th>
+                                            <th width="5%"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td className={cx('image')}>
+                                                <LoadingSkeleton className={'image-cart'}></LoadingSkeleton>
+                                            </td>
+                                            <td className={cx('info')}>
+                                                <LoadingSkeleton className={'name-cart'}></LoadingSkeleton>
+                                            </td>
+                                            <td className={cx('price')}>
+                                                <span>
+                                                    <LoadingSkeleton className={'other'}></LoadingSkeleton>
+                                                </span>
+                                            </td>
+                                            <td className={cx('quantity')}>
+                                                <LoadingSkeleton className={'other'}></LoadingSkeleton>
+                                            </td>
+                                            <td className={cx('price')}>
+                                                <span>
+                                                    <LoadingSkeleton className={'other'}></LoadingSkeleton>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <button className={cx('delete')}>
+                                                    <LoadingSkeleton className={'other'}></LoadingSkeleton>
+                                                </button>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             )}

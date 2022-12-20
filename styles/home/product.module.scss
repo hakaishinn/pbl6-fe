@@ -4,6 +4,7 @@
     justify-content: space-between;
     align-items: center;
     width: 224px;
+    min-height: 50rem;
 
     position: relative;
     margin-top: 30px;
@@ -12,21 +13,20 @@
     border-radius: 5px;
     -webkit-transition: all 300ms ease;
     transition: all 300ms ease;
-    min-height: 50rem;
 
     & button {
         color: #b0b0b0;
         background-color: transparent;
         border: 2px solid #d7d7d7;
         outline: none;
-        padding:0 2.3rem;
+        padding: 0 2.3rem;
         line-height: 3rem;
         font-size: 1.2rem;
         font-weight: 700;
         margin: 1.6rem 0;
         cursor: pointer;
 
-        &:hover{
+        &:hover {
             color: #f3652a;
             border-color: #f3652a;
         }
@@ -35,15 +35,31 @@
 
 .name {
     text-decoration: none;
-    color: #333;
     text-align: center;
-    font-weight: 700;
+    color: #333;
     font-size: 1.6rem;
-    padding: 1.2rem 0.8rem 0.4rem;
-    width: 100%;
+    font-weight: 700;
+    margin: 0.8rem;
+    line-height: 2.2rem;
+    overflow: hidden;
     display: block;
-    &:hover{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+
+    &:hover {
         color: #f3652a;
+    }
+}
+
+.sub-name {
+    width: max-content;
+    & span {
+        font-size: 1.2rem;
+        color: #333;
+        background-color: var(--white);
+        border: 1px solid #333;
+        padding: 0.2rem 0.4rem;
     }
 }
 
@@ -57,7 +73,7 @@
         font-weight: 700;
         margin-right: 0.7rem;
     }
-    
+
     & .old-price {
         font-weight: 500;
         color: #333;

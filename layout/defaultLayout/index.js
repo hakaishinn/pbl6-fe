@@ -15,7 +15,7 @@ function DefaultLayout({ children }) {
             const userToken = await JSON.parse(localStorage.getItem('userToken'));
             setUser(userToken);
         };
-        if(!user){
+        if (!user) {
             getUserToken();
         }
     }, []);
