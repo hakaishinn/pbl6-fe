@@ -53,30 +53,30 @@ export default function Home() {
         nextArrow: <NextArrow></NextArrow>,
     };
 
-    const [productsFull, setProductsFull] = useState([])
-    const [gifts, setGifts] = useState([])
-    const [productsNew, setProductsNew] = useState([])
+    const [productsFull, setProductsFull] = useState([]);
+    const [gifts, setGifts] = useState([]);
+    const [productsNew, setProductsNew] = useState([]);
 
     useEffect(() => {
         const getData = async () => {
             const productsNew = await productsServices.getProductsNew({ size: 12 });
-            if(productsNew && productsNew.length > 0){
-                setProductsNew(productsNew)
+            if (productsNew && productsNew.length > 0) {
+                setProductsNew(productsNew);
             }
             const productsFull = await productsServices.getProductByCategoryId(5, { page: 1, size: 12 });
-            if(productsFull && productsFull.data && productsFull.data.data && productsFull.data.data.length > 0){
-                setProductsFull(productsFull.data.data)
+            if (productsFull && productsFull.data && productsFull.data.data && productsFull.data.data.length > 0) {
+                setProductsFull(productsFull.data.data);
             }
             const gifts = await productsServices.getProductByCategoryId(6, { page: 1, size: 12 });
-            if(gifts && gifts.data && gifts.data.data && gifts.data.data.length > 0){
-                setGifts(gifts.data.data)
+            if (gifts && gifts.data && gifts.data.data && gifts.data.data.length > 0) {
+                setGifts(gifts.data.data);
             }
         };
         getData();
     }, []);
 
     return (
-        <DefaultLayout>
+        <>
             <Slider {...settings}>
                 <div className={cx('slider')}>
                     <img src="/images/slide1.png" alt="slider1"></img>
@@ -213,6 +213,6 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-        </DefaultLayout>
+        </>
     );
 }

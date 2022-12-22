@@ -1,0 +1,58 @@
+.title {
+    font-size: 2.8rem;
+    color: #333;
+    font-weight: 500;
+    margin: 1.6rem 0;
+}
+
+.wrapper {
+    p {
+        font-size: 1.6rem;
+        color: #333;
+    }
+}
+
+.table {
+    box-shadow: 0 3px 10px #ccc;
+    padding: 1.6rem;
+    border-radius: 4px;
+
+    & table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    td {
+        color: #333;
+        border: 1px solid;
+        text-align: center;
+    }
+
+    & th {
+        padding: 0.5rem 1rem;
+    }
+
+    & td {
+        padding: 0.4rem;
+
+        & a {
+            text-decoration: none;
+            color: #333;
+
+            &:hover {
+                color: rgb(245, 129, 52);
+            }
+        }
+    }
+}
+
+.total-price {
+    font-size: 2rem;
+    font-weight: 500;
+    color: red;
+}
+
+.total {
+    font-size: 2rem;
+    font-weight: 700;
+}

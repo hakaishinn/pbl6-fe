@@ -5,19 +5,21 @@ import Link from 'next/link';
 import styles from '/styles/header/header.module.scss';
 import Search from './Search';
 import {UserIcon } from '../Icons';
-import { useContext } from 'react';
+import { useContext, memo } from 'react';
 import { AppContext } from '/context/appProvider.js';
 import Cart from './cart';
+import { useRouter } from 'next/router';
 
 const cx = classNames.bind(styles);
 
 function Header() {
-    const { setIsShowLogin, user, setUser, setQuantityCart} = useContext(AppContext);
+    const { setIsShowLogin, user, setUser, setCartItem} = useContext(AppContext);
+    const router = useRouter()
 
     const handleLogout = () => {
         localStorage.removeItem("userToken");
         setUser(null)
-        setQuantityCart(0)
+        setCartItem([])
     }
     return (
         <div className={cx('header')}>
@@ -40,7 +42,7 @@ function Header() {
                                             { user ? (
                                                 <>
                                                     <li className={cx('sub-account-item')}>
-                                                        <button>Tài khoản của tôi</button>
+                                                        <button onClick={() => router.push('/account')}>Tài khoản của tôi</button>
                                                     </li>
                                                     
                                                     <li className={cx('sub-account-item')}>
@@ -78,4 +80,4 @@ function Header() {
     );
 }
 
-export default Header;
+export default memo(Header);

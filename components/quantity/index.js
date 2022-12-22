@@ -50,11 +50,6 @@ function Quantity({ parentCallback, value = 1, isCart = false, product = {} }) {
 
     const sendData = async (quantity) => {
         if (isCart) {
-            // await CallApi(`cart/${product.id}`, 'PUT', {
-            //     ...product,
-            //     quantity_product: quantity,
-            // });
-            // await cartServices.updateCartItem(product.idProduct, user.idUser, quantity)
             parentCallback({quantity, idItemCart : product.id});
         } else {
             parentCallback(quantity);

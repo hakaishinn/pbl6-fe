@@ -29,7 +29,7 @@ export const createCartByUserId = async (userId) => {
 
 export const addCartItem = async (IdProduct, IdUser, Quantity) => {
     try {
-        request.post(
+        const res = await request.post(
             'cart/cartItem',
             {
                 IdProduct: IdProduct,
@@ -41,6 +41,20 @@ export const addCartItem = async (IdProduct, IdUser, Quantity) => {
                     'Content-Type': 'multipart/form-data',
                 },
             },
+        );
+        return res.data
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+export const updateCartItem = async (idItem, quantity) => {
+    try {
+        request.put(
+            `cart/cartItem/${idItem}`,
+            {
+                quantity: quantity
+            }
         );
     } catch (error) {
         console.log(error.message);

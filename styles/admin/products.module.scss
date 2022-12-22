@@ -89,3 +89,32 @@
         cursor: pointer;
     }
 }
+
+.pagination {
+    margin-bottom: 3.2rem;
+    margin-top: 3.2rem;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+
+    & .page-num {
+        padding: 0.8rem 1.5rem;
+        cursor: pointer;
+        border-radius: 4px;
+        font-weight: 500;
+
+        &:hover {
+            background-color: #c83548;
+            color: var(--white);
+        }
+    }
+}
+
+.active {
+    background-color: #c83548;
+    color: var(--white);
+    border-radius: 4px;
+}
+

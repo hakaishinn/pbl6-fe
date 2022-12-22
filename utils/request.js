@@ -1,20 +1,21 @@
 import axios from 'axios';
-import https from 'https'
+import https from 'https';
 
 const request = axios.create({
-    baseURL: 'https://localhost:7116/api/',
-    // headers: {
-    //     'content-type': 'application/json',
-    // },
+    baseURL: 'http://sisanonhkone-001-site1.atempurl.com/api/',
     httpsAgent: new https.Agent({
-      rejectUnauthorized: false
-    })
+        rejectUnauthorized: false,
+    }),
 });
 
-// request.interceptors.request.use(async (config) => {
-//     // Handle token here ...
-//     return config;
-// });
+request.interceptors.request.use(async (config) => {
+    const userToken = await localStorage.getItem('userToken');
+    if (userToken) {
+        const token = JSON.parse(userToken).token;
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
 
 // request.interceptors.response.use(
 //     (response) => {

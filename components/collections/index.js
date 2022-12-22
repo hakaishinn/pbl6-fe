@@ -1,13 +1,11 @@
 import classNames from 'classnames/bind';
 import { useEffect, useState, memo } from 'react';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 
-
 import styles from '/styles/collections/collections.module.scss';
-import DefaultLayout from '/layout/defaultLayout';
 import Sidebar from './sidebar';
 import ListProduct from './listProduct';
-import { useRouter } from 'next/router';
 
 import * as productsServices from '/services/productsServices';
 
@@ -17,6 +15,7 @@ function Collections({ isSearch = false }) {
     const router = useRouter();
     const categoryId = router.query.category_id;
     const [data, setData] = useState(null);
+    const [sortPrice, setSortPrice] = useState(null);
 
     useEffect(() => {
         const getData = async () => {
@@ -31,34 +30,34 @@ function Collections({ isSearch = false }) {
     }, []);
     return (
         <>
-        <Head>
-            {data && <title>{isSearch ? `Keyword:  "${data?.keyword}"` : data?.title ?? null} - Hikaru Shop</title>}
-        </Head>
-        <DefaultLayout>
+            <Head>
+                {data && <title>{isSearch ? `Keyword:  "${data?.keyword}"` : data?.title ?? null} - Hikaru Shop</title>}
+            </Head>
+
             <div className="container">
                 <div className={cx('content')}>
                     <div className={cx('sidebar')}>
-                        <Sidebar></Sidebar>
+                        <Sidebar setData={setData} sortPrice={sortPrice} setSortPrice={setSortPrice}></Sidebar>
                     </div>
                     <div className={cx('group-product')}>
                         <h1 className={cx('title')}>
                             {isSearch ? `Keyword: ${data?.keyword ?? ''}` : data?.title ?? ''}
                         </h1>
-                        <div className={cx('sort')}>
+                        {/* <div className={cx('sort')}>
                             <span>Sắp xếp theo:</span>
                             <select>
                                 <option value={0}>Mặc định</option>
                                 <option value={1}>Từ A - Z</option>
                                 <option value={2}>Từ Z - A</option>
                             </select>
-                        </div>
+                        </div> */}
                         <div>
-                            <ListProduct data={data} setData={setData} isSearch={isSearch}></ListProduct>
+                            <ListProduct sortPrice={sortPrice} setSortPrice={setSortPrice} data={data} setData={setData} isSearch={isSearch}></ListProduct>
                         </div>
                     </div>
                 </div>
             </div>
-        </DefaultLayout></>
+        </>
     );
 }
 

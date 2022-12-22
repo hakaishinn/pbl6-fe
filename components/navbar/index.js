@@ -53,7 +53,7 @@ function Navbar() {
                             render={(attrs) => (
                                 <div className={cx('subnav-homepage')} tabIndex="-1" {...attrs}>
                                     <ul>
-                                        {categories.map((category) => (
+                                        {categories.length > 0 && categories?.map((category) => (
                                             <li key={category.id}>
                                                 <Link href={`/collections/${category.id}`}>{category.categoryType}</Link>
                                             </li>

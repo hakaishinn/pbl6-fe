@@ -1,6 +1,6 @@
 import ReactPaginate from 'react-paginate';
 import classNames from 'classnames/bind';
-import { useState, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 
 import styles from '/styles/collections/listProduct.module.scss';
@@ -10,86 +10,107 @@ import { LoadingSkeleton } from '../../loading';
 
 const cx = classNames.bind(styles);
 
-function ListProduct({ isSearch, data, setData }) {
+function ListProduct({ isSearch, data, setData, sortPrice, setSortPrice }) {
+    const paginateRef = useRef();
     const router = useRouter();
 
     const {
-        query: { category_id, name },
+        query: { category_id, name, page },
     } = router;
 
     const pageCount = data?.data?.totalPage || 0;
 
     const handlePageClick = async (event) => {
-        console.log(event.selected);
-        if (isSearch) {
-            if (name) {
-                const data = await productsServices.search(name, {
-                    page: event.selected + 1,
-                    size: 9,
-                });
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth',
-                });
-                setData(data);
-            }
+        if (sortPrice) {
+            router.push({
+                pathname: `/collections/${category_id}`,
+                query: { page: event.selected + 1, sortPrice: sortPrice },
+            });
         } else {
-            if (category_id) {
-                const data = await productsServices.getProductByCategoryId(category_id, {
-                    page: event.selected + 1,
-                    size: 9,
-                });
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth',
-                });
-                setData(data);
-            }
+            router.push({
+                pathname: `/collections/${category_id}`,
+                query: { page: event.selected + 1 },
+            });
         }
     };
 
     useEffect(() => {
-        const loadDataPageOne = async () => {
+        const loadData = async () => {
             if (isSearch) {
-                if (name) {
+                if (name && page) {
+                    const data = await productsServices.search(name, {
+                        page: page,
+                        size: 9,
+                    });
+                    setData(data);
+                } else if (name && !page) {
                     const data = await productsServices.search(name, {
                         page: 1,
                         size: 9,
                     });
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth',
-                    });
                     setData(data);
+
+                    if (paginateRef?.current) {
+                        paginateRef.current.state.selected = 0;
+                    }
                 }
             } else {
-                if (category_id) {
-                    const data = await productsServices.getProductByCategoryId(category_id, {
-                        page: 1,
-                        size: 9,
-                    });
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth',
-                    });
-                    setData(data);
+                if (category_id && page) {
+                    if (sortPrice) {
+                        const data = await productsServices.sortProductByPrice(category_id, {
+                            star: parseInt(sortPrice.split('-')[0]),
+                            end: parseInt(sortPrice.split('-')[1]),
+                            page: page,
+                            size: 9,
+                        });
+                        setData(data);
+                    } else {
+                        const data = await productsServices.getProductByCategoryId(category_id, {
+                            page: page,
+                            size: 9,
+                        });
+                        setData(data);
+                    }
+                } else if (category_id && !page) {
+                    if (sortPrice) {
+                        const data = await productsServices.sortProductByPrice(category_id, {
+                            star: parseInt(sortPrice.split('-')[0]),
+                            end: parseInt(sortPrice.split('-')[1]),
+                            page: 1,
+                            size: 9,
+                        });
+                        setData(data);
+                    } else {
+                        const data = await productsServices.getProductByCategoryId(category_id, {
+                            page: 1,
+                            size: 9,
+                        });
+
+                        if (paginateRef?.current) {
+                            paginateRef.current.state.selected = 0;
+                        }
+                        setData(data);
+                    }
                 }
             }
         };
-        loadDataPageOne();
-    }, [category_id, name]);
-
+        loadData();
+    }, [category_id, name, page, sortPrice]);
     return (
         <>
             <div className={cx('list-product')}>
                 {!data
                     ? Array(6)
                           .fill(0)
-                          .map((item, index) => <LoadingSkeleton key={index} className={'collection-product'}></LoadingSkeleton>)
+                          .map((item, index) => (
+                              <LoadingSkeleton key={index} className={'collection-product'}></LoadingSkeleton>
+                          ))
                     : data?.data?.data?.map((product) => <Product key={product.idProduct} product={product}></Product>)}
             </div>
-            {data?.data?.data ? (
+            {data?.data?.data.length > 0 ? (
                 <ReactPaginate
+                    forcePage={page ? page - 1 : 0}
+                    ref={paginateRef}
                     breakLabel="..."
                     nextLabel=">"
                     onPageChange={handlePageClick}
@@ -103,7 +124,7 @@ function ListProduct({ isSearch, data, setData }) {
                     nextLinkClassName={cx('page-num')}
                     activeLinkClassName={cx('active')}
                 />
-            ) : undefined}
+            ) : <h2>Không có sản phẩm nào</h2>}
         </>
     );
 }

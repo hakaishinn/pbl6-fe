@@ -5,8 +5,19 @@ export const AppContext = createContext();
 function AppProvider({ children }) {
     const [isShowLogin, setIsShowLogin] = useState(false);
     const [isShowRegister, setIsShowRegister] = useState(false);
-    const [quantityCart, setQuantityCart] = useState(0);
+    const [cartItem, setCartItem] = useState([]);
     const [user, setUser] = useState(null);
+    
+    useEffect(() => {
+        const getUserToken = async () => {
+            console.log("provider>>>>>>", user);
+            const userToken = await JSON.parse(localStorage.getItem('userToken'));
+            setUser(userToken);
+        };
+        if (user === null) {
+            getUserToken();
+        }
+    });
 
     return (
         <AppContext.Provider
@@ -15,10 +26,10 @@ function AppProvider({ children }) {
                 setIsShowLogin,
                 isShowRegister,
                 setIsShowRegister,
-                quantityCart,
-                setQuantityCart,
+                cartItem,
+                setCartItem,
                 user,
-                setUser,
+                setUser
             }}
         >
             {children}

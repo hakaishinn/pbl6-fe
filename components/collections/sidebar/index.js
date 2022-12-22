@@ -5,17 +5,21 @@ import { memo, useEffect, useState } from 'react';
 import styles from '/styles/collections/sidebar.module.scss';
 
 import * as categoriesServices from '/services/categoriesServices';
+
 import { LoadingSkeleton } from '../../loading';
 
 const cx = classNames.bind(styles);
 
-function Sidebar() {
+function Sidebar({ setSortPrice }) {
     const [categories, setCategories] = useState([]);
 
-    function onChangeValue(event) {
-        const price = event.target.value.split('-');
-        console.log(price[1]);
-    }
+    const onChangeValue = async (event) => {
+        if (event.target.value === 'no') {
+            setSortPrice(null);
+        } else {
+            setSortPrice(event.target.value);
+        }
+    };
 
     useEffect(() => {
         const getData = async () => {
@@ -40,7 +44,9 @@ function Sidebar() {
                         {categories.length === 0
                             ? Array(6)
                                   .fill(0)
-                                  .map((item, index) => <LoadingSkeleton key={index} className={'category'}></LoadingSkeleton>)
+                                  .map((item, index) => (
+                                      <LoadingSkeleton key={index} className={'category'}></LoadingSkeleton>
+                                  ))
                             : categories.map((category) => (
                                   <li key={category.id} className={cx('category-item')}>
                                       <Link href={`/collections/${category.id}`}>{category.categoryType}</Link>
@@ -55,6 +61,10 @@ function Sidebar() {
                 </div>
                 <div className={cx('price')} onChange={onChangeValue}>
                     <h2 className={cx('sub-title')}>Giá</h2>
+                    <div className={cx('price-item')}>
+                        <input type={'radio'} id="price1" name="filter-price" value={'no'} defaultChecked></input>
+                        <label htmlFor="price1">Không lọc</label>
+                    </div>
                     <div className={cx('price-item')}>
                         <input type={'radio'} id="price1" name="filter-price" value={'0-50000'}></input>
                         <label htmlFor="price1">Dưới 50,000đ</label>

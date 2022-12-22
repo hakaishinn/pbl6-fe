@@ -9,15 +9,19 @@ import * as cartServices from '/services/cartServices';
 
 const cx = classNames.bind(styles);
 function Product({ product }) {
-    const { user, setQuantityCart, setIsShowLogin } = useContext(AppContext);
+    const { user, setCartItem, setIsShowLogin } = useContext(AppContext);
 
     const newPrice = product ? product.price - product.price * product.discount : 0;
 
     const handleAddToCart = async () => {
         if (user) {
-            await cartServices.addCartItem(product.idProduct, user.idUser, 1);
-            setQuantityCart((prev) => prev + 1);
-            alert('Thêm thành công');
+            const data = await cartServices.addCartItem(product.idProduct, user.idUser, 1);
+            if (data && data.status === 'Success') {
+                setCartItem((prev) => [...prev, data.data]);
+                alert('Thêm thành công');
+            } else {
+                alert('Thêm thất bại');
+            }
         } else {
             setIsShowLogin(true);
         }

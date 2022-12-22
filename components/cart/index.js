@@ -1,42 +1,50 @@
 import classNames from 'classnames/bind';
 import Link from 'next/link';
 import { useEffect, useState, useContext } from 'react';
+import { useRouter } from 'next/router';
 
 import styles from '/styles/cart/cart.module.scss';
 import Quantity from '/components/quantity';
 import { AppContext } from '/context/appProvider.js';
 import * as cartServices from '/services/cartServices';
-import { LoadingSkeleton } from '../loading';
+import DefaultLayout from '/layout/defaultLayout';
 
 const cx = classNames.bind(styles);
 function Cart() {
-    const { user, quantityCart, setQuantityCart } = useContext(AppContext);
+    const router = useRouter()
+    const { user, cartItem, setCartItem } = useContext(AppContext);
 
-    const [data, setData] = useState(null);
+    const [data, setData] = useState(cartItem);
 
-    const getCarts = async () => {
-        if (user.idUser) {
-            const result = await cartServices.getCartByUserId(user.idUser);
-            if (result && result.items) {
-                setData(result.items);
-            }
-        }
+    const handleDelete = async (id) => {
+        cartServices.removeCartItemByItem(parseInt(id));
+        setCartItem(data.filter((item) => item.id !== id));
+        setData(data.filter((item) => item.id !== id));
     };
 
     const changeQuantity = (childData) => {
         if (data && data.length > 0) {
-            setData(
-                data.map((item) => {
-                    if (item.id === childData.idItemCart) {
+            const dataAfterChange = data.map((item) => {
+                if (item.id === childData.idItemCart && item.quantityCart !== childData.quantity) {
+                    if (childData.quantity === 0) {
+                        cartServices.updateCartItem(childData.idItemCart, 1);
+                        return {
+                            ...item,
+                            quantityCart: 1,
+                        };
+                    } else {
+                        cartServices.updateCartItem(childData.idItemCart, childData.quantity);
                         return {
                             ...item,
                             quantityCart: childData.quantity,
                         };
-                    } else {
-                        return item;
                     }
-                }),
-            );
+                } else {
+                    return item;
+                }
+            });
+            setData(dataAfterChange);
+            setCartItem(dataAfterChange);
         }
     };
 
@@ -55,28 +63,36 @@ function Cart() {
         }).format(total ? total : 0);
     };
 
+    const handleCheckout = () => {
+
+        router.push('/checkouts')
+    }
+
     useEffect(() => {
-        const GetData = async () => {
+        const GetData = () => {
             if (user) {
-                await getCarts();
+                setData(cartItem);
             } else {
                 setData([]);
             }
         };
         GetData();
-    }, [user]);
+    }, [JSON.stringify(user), JSON.stringify(cartItem)]);
 
     return (
-        <div className="container">
-            {user ? (
-                quantityCart !== 0 ? (
-                    <div className={cx('wrapper')}>
-                        <h1 className={cx('cart-title')}>Giỏ hàng của bạn</h1>
-                        <div className={cx('cart-table')}>
-                            <div className={cx('cart-number')}>
-                                Bạn đang có <span>{quantityCart} sản phẩm</span> trong giỏ hàng.
-                            </div>
-                            {data?.length > 0 ? (
+        <DefaultLayout>
+            <div className="container">
+                {user ? (
+                    data?.length > 0 ? (
+                        <div className={cx('wrapper')}>
+                            <h1 className={cx('cart-title')}>Giỏ hàng của bạn</h1>
+                            <div className={cx('cart-table')}>
+                                <div className={cx('cart-number')}>
+                                    Bạn đang có{' '}
+                                    <span>{data.reduce((acc, product) => acc + product.quantityCart, 0)} sản phẩm</span>{' '}
+                                    trong giỏ hàng.
+                                </div>
+
                                 <table>
                                     <thead>
                                         <tr>
@@ -141,11 +157,7 @@ function Cart() {
                                                     <td>
                                                         <button
                                                             className={cx('delete')}
-                                                            onClick={async () => {
-                                                                cartServices.removeCartItemByItem(parseInt(product.id));
-                                                                setData(data.filter((item) => item.id !== product.id));
-                                                                setQuantityCart((prev) => prev - product.quantityCart);
-                                                            }}
+                                                            onClick={() => handleDelete(product.id)}
                                                         >
                                                             Xóa
                                                         </button>
@@ -154,64 +166,24 @@ function Cart() {
                                             ))}
                                     </tbody>
                                 </table>
-                            ) : (
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th width="50%" colSpan={2}>
-                                                Sản phẩm
-                                            </th>
-                                            <th width="15%">Đơn giá</th>
-                                            <th width="15%">Số lượng</th>
-                                            <th width="15%">Thành tiền</th>
-                                            <th width="5%"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className={cx('image')}>
-                                                <LoadingSkeleton className={'image-cart'}></LoadingSkeleton>
-                                            </td>
-                                            <td className={cx('info')}>
-                                                <LoadingSkeleton className={'name-cart'}></LoadingSkeleton>
-                                            </td>
-                                            <td className={cx('price')}>
-                                                <span>
-                                                    <LoadingSkeleton className={'other'}></LoadingSkeleton>
-                                                </span>
-                                            </td>
-                                            <td className={cx('quantity')}>
-                                                <LoadingSkeleton className={'other'}></LoadingSkeleton>
-                                            </td>
-                                            <td className={cx('price')}>
-                                                <span>
-                                                    <LoadingSkeleton className={'other'}></LoadingSkeleton>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <button className={cx('delete')}>
-                                                    <LoadingSkeleton className={'other'}></LoadingSkeleton>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            )}
+                            </div>
+                            <div className={cx('cart-bottom')}>
+                                <h3 className={cx('total-money')}>
+                                    Thành tiền: <span>{total()}</span>
+                                </h3>
+                                <button onClick={handleCheckout} className={cx('btn')}>
+                                    Đặt hàng
+                                </button>
+                            </div>
                         </div>
-                        <div className={cx('cart-bottom')}>
-                            <h3 className={cx('total-money')}>
-                                Thành tiền: <span>{total()}</span>
-                            </h3>
-                            <button className={cx('btn')}>Thanh toán</button>
-                        </div>
-                    </div>
+                    ) : (
+                        <h1 className={cx('cart-notification')}>Giỏ hàng của bạn trống</h1>
+                    )
                 ) : (
-                    <h1 className={cx('cart-notification')}>Giỏ hàng của bạn trống</h1>
-                )
-            ) : (
-                <h1 className={cx('cart-notification')}>Bạn cần đăng nhập để xem giỏ hàng</h1>
-            )}
-        </div>
+                    <h1 className={cx('cart-notification')}>Bạn cần đăng nhập để xem giỏ hàng</h1>
+                )}
+            </div>
+        </DefaultLayout>
     );
 }
 

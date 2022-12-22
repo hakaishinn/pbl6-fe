@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 
 import Header from '../../components/header';
 import Navbar from '../../components/navbar';
@@ -9,16 +9,7 @@ import Register from '/components/register';
 import IconContact from '../../components/iconContact';
 
 function DefaultLayout({ children }) {
-    const { isShowLogin, isShowRegister, setUser, user } = useContext(AppContext);
-    useEffect(() => {
-        const getUserToken = async () => {
-            const userToken = await JSON.parse(localStorage.getItem('userToken'));
-            setUser(userToken);
-        };
-        if (!user) {
-            getUserToken();
-        }
-    }, []);
+    const { isShowLogin, isShowRegister } = useContext(AppContext);
 
     return (
         <>

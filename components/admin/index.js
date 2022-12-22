@@ -1,5 +1,6 @@
 import AdminLayout from '../../layout/adminLayout';
 import Dashboard from './dashboard';
+
 function Admin() {
     return (
         <div>

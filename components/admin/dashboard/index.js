@@ -1,11 +1,15 @@
 import classNames from 'classnames/bind';
-import styles from '/styles/admin/dashboard.module.scss';
-import Card from '../card';
 import { faReceipt, faSackDollar } from '@fortawesome/free-solid-svg-icons';
 import { faUser } from '@fortawesome/free-regular-svg-icons';
 
+import styles from '/styles/admin/dashboard.module.scss';
+import Card from '../card';
+import * as orderServices from '/services/orderServices'
+
+
 const cx = classNames.bind(styles);
 function Dashboard() {
+
     return (
         <div className={cx('wrapper')}>
             <h1>Tổng quan</h1>

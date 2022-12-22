@@ -9,11 +9,26 @@ export const getCategories = async (params = {}) => {
     }
 }
 
-export const remove = async(id) => {
+export const update = async(id, categoryType) => {
     try {
-        request.delete(`product/category/${id}`)
+        const res = await request.put(`products/category/${id}`, {
+            categoryType: categoryType
+        })
+        return res.data
     } catch (error) {
         console.log(error);
     }
 }
+
+export const add = async(categoryType) => {
+    try {
+        const res = await request.post(`products/category`, {
+            categoryType: categoryType
+        })
+        return res.data
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 

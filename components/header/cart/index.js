@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, memo, useState } from 'react';
 import Link from 'next/link';
 
 import styles from '/styles/header/cart.module.scss';
@@ -10,22 +10,26 @@ import * as cartServices from '/services/cartServices';
 const cx = classNames.bind(styles);
 
 function Cart() {
-    const { quantityCart, setQuantityCart, user } = useContext(AppContext);
+    const { cartItem, setCartItem, user } = useContext(AppContext);
+    const [total, setTotal] = useState(0)
 
     useEffect(() => {
         const getQuantityCart = async () => {
             if (user && user.idUser) {
                 const data = await cartServices.getCartByUserId(user.idUser);
                 if (data && data.items && data.items.length > 0) {
-                    const totalItem = data.items.reduce((acc, product) => acc + product.quantityCart, 0);
-                    setQuantityCart(totalItem);
+                    setCartItem(data.items);
                 }
             }
         };
-        if (user && user.idUser) {
+        if (user && user.idUser && cartItem.length === 0) {
             getQuantityCart();
         }
-    }, [user]);
+    }, [JSON.stringify(user)]);
+
+    useEffect(() => {
+        setTotal(cartItem.reduce((acc, product) => acc + product.quantityCart, 0))
+    }, [JSON.stringify(cartItem)])
     return (
         <div className={cx('wrapper')}>
             <Link href={'/cart'}>
@@ -34,7 +38,7 @@ function Cart() {
                         <CartIcon className={cx('icon')}></CartIcon>
                     </div>
                     <p>
-                        Giỏ hàng (<span>{quantityCart}</span>)
+                        Giỏ hàng (<span>{total}</span>)
                     </p>
                 </div>
             </Link>
@@ -42,4 +46,4 @@ function Cart() {
     );
 }
 
-export default Cart;
+export default memo(Cart);
