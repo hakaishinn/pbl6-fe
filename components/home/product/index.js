@@ -57,7 +57,7 @@ function Product({ product }) {
                 </div>
             </div>
             <Link className={cx('image')} href={`/products/${product.idProduct}`}>
-                <img src={product.image} alt={product.name}></img>
+                <img src={product.image} alt={product.name} title={product.name}></img>
             </Link>
             <button onClick={handleAddToCart}>THÊM VÀO GIỎ</button>
         </div>

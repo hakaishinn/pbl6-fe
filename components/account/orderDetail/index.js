@@ -12,9 +12,7 @@ function OrderDetail() {
     const router = useRouter();
 
     const id = router.query.id;
-
-    console.log(id);
-
+    
     const [order, setOrder] = useState(null);
 
     useEffect(() => {
@@ -48,7 +46,7 @@ function OrderDetail() {
                                 {order &&
                                     order.orders.length > 0 &&
                                     order.orders.map((item) => (
-                                        <tr key={item.idOrder}>
+                                        <tr key={item.idProduct}>
                                             <td>
                                                 <Link href={`/products/${item.idProduct}`}>#{item.idProduct}</Link>
                                             </td>
@@ -64,7 +62,7 @@ function OrderDetail() {
                                     ))}
 
                                 <tr>
-                                    <td className={cx('total')} colspan="2">
+                                    <td className={cx('total')} colSpan="2">
                                         Tổng cộng
                                     </td>
                                     <td>

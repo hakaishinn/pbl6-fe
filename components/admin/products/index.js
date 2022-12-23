@@ -125,7 +125,7 @@ function Products() {
                     <select onChange={(e) => setFilter(e.target.value)}>
                         <option value={'all'}>Tất cả</option>
                         {categories.map((item) => (
-                            <option value={item.id}>{item.categoryType}</option>
+                            <option key={item.id} value={item.id}>{item.categoryType}</option>
                         ))}
                     </select>
 

@@ -30,7 +30,7 @@ function Product({ product }) {
         <div className={cx('wrapper')}>
             <div className={cx('image')}>
                 <Link href={`/products/${product.idProduct}`}>
-                    <img src={product.image} alt={product.name}></img>
+                    <img src={product.image} alt={product.name} title={product.name}></img>
                 </Link>
             </div>
             <div className={cx('text')}>

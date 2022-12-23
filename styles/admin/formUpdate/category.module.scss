@@ -14,8 +14,12 @@
 
 .wrapper{
     background-color: white;
-    width: 500px;
-    padding: 16px;
+    width: 80vw;
+    height: 90vh;
+    padding: 1.6rem;
+    overflow-y: auto;
+    border-radius: 4px;
+    position: relative;
 
     h2{
         font-size: 2.4rem;
@@ -29,19 +33,45 @@
         padding: 0.8rem 2.4rem;
         cursor: pointer;
         margin-right: 0.8rem;
+        background-color: #007BFF;
+        border-radius: 4px;
+        color: white;
 
         &:hover{
-            background-color: #333;
+            opacity: 0.9;
+        }
+    }
+    span.icon-close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 4rem;
+        height: 4rem;
+        color: #333;
+        cursor: pointer;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:hover{
+            background-color: #dc3545;
             color: white;
         }
     }
+    .btn-close {
+        background-color: #dc3545;
+    }
 }
+
 
 .form-input{
     margin: 0.8rem 0;
-    label {
-        display: inline-block;
-        width: 10rem;
+
+    textarea {
+        width: 100%;
+        min-height: 10rem;
+        padding: 0.8rem;
     }
 
     input {
@@ -52,10 +82,50 @@
 
     }
 
+    
     select{
         font-size: 1.6rem;
         color: #333;
         padding: 0.8rem;
         width: 100%;
+    }
+    input, textarea, select{
+        outline: none;
+        border: 1px solid rgb(223, 217, 217);
+
+        &:focus{
+            border-color: rgb(248, 70, 70);
+            box-shadow: 0 0 5px rgb(200, 53, 72);
+        }
+    }
+}
+
+.image-preview{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 0.8rem 0;
+
+    img {
+        width: 17rem;
+    }
+    
+}
+
+.inputUploadAdd{
+    display: none;
+}
+
+.lb-upload{
+    background-color: #ccc;
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #17A2B8;
+    color: white;
+
+    &:hover{
+        opacity: 0.9;
     }
 }

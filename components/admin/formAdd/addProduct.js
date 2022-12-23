@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import styles from '/styles/admin/formUpdate/category.module.scss';
 
 import * as productsServices from '/services/productsServices';
@@ -7,6 +7,8 @@ import * as productsServices from '/services/productsServices';
 const cx = classNames.bind(styles);
 
 function AddProduct({ setShowAdd, categories, setProducts, page, filter }) {
+    const inputRef = useRef();
+    const imageRef = useRef();
     const [product, setProduct] = useState({
         name: '',
         image: '',
@@ -17,7 +19,6 @@ function AddProduct({ setShowAdd, categories, setProducts, page, filter }) {
         idCate: 1,
     });
 
-    console.log('add', page);
 
     const handleAdd = async () => {
         const res = await productsServices.addProduct(product);
@@ -57,37 +58,48 @@ function AddProduct({ setShowAdd, categories, setProducts, page, filter }) {
         }
     };
     return (
-        <div className={cx('overlay')}>
+        <div className={cx('overlay')} onClick={() => setShowAdd(false)}>
             (
-            <div className={cx('wrapper')}>
+            <div className={cx('wrapper')} onClick={(e) => e.stopPropagation()}>
                 <h2>Thêm Truyện</h2>
+
+                <span className={cx('icon-close')} onClick={() => setShowAdd(false)}>&#x2716;</span>
 
                 <div className={cx('form-input')}>
                     <label htmlFor="name">Tên truyện</label>
                     <input
                         id={'name'}
-                        placeholder="Tên thể loại"
+                        placeholder="Tên truyện"
                         value={product.name}
                         onChange={(e) => setProduct((prev) => ({ ...prev, name: e.target.value }))}
                     ></input>
                 </div>
-                <div className={cx('form-input')}>
-                    <label htmlFor="image">URL hình ảnh</label>
-                    <input
-                        id={'image'}
-                        placeholder="URL hình ảnh"
-                        value={product.image}
-                        onChange={(e) => setProduct((prev) => ({ ...prev, image: e.target.value }))}
-                    ></input>
-                </div>
+
+                <input
+                    className={cx('inputUploadAdd')}
+                    id='inputUploadAdd'
+                    ref={inputRef}
+                    type={'file'}
+                    onChange={(e) =>
+                        {
+                            imageRef.current.src = `/imageProduct/${e.target.files[0].name}`
+                            setProduct((prev) => ({ ...prev, image: `/imageProduct/${e.target.files[0].name}` }))
+                        }
+                    }
+                ></input>
+                <label className={cx('lb-upload')} htmlFor='inputUploadAdd'>Chọn hình ảnh</label>
+                <br></br>
+
+                <div className={cx('image-preview')}><img ref={imageRef}></img></div>
+
                 <div className={cx('form-input')}>
                     <label htmlFor="desc">Mô tả</label>
-                    <input
+                    <textarea
                         id={'desc'}
                         placeholder="Mô tả"
                         value={product.desc}
                         onChange={(e) => setProduct((prev) => ({ ...prev, desc: e.target.value }))}
-                    ></input>
+                    ></textarea>
                 </div>
                 <div className={cx('form-input')}>
                     <label htmlFor="price">Đơn giá</label>
@@ -128,7 +140,7 @@ function AddProduct({ setShowAdd, categories, setProducts, page, filter }) {
                 </div>
 
                 <button onClick={handleAdd}>Thêm</button>
-                <button onClick={() => setShowAdd(false)}>Đóng</button>
+                <button className={cx('btn-close')} onClick={() => setShowAdd(false)}>Đóng</button>
             </div>
             )
         </div>

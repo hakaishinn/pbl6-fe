@@ -15,15 +15,27 @@
         padding: 0.8rem 2.4rem;
         cursor: pointer;
         border-radius: 2px;
+        background-color: rgb(40, 167, 69);
+        color: white;
 
         &:hover {
-            background-color: #333;
-            color: var(--white);
+            opacity: 0.9;
         }
+    }
+
+    .danger{
+        background-color: rgb(220, 53, 69);
+    }
+
+    .btn-space{
+        display: flex;justify-content: space-between;
     }
 }
 
 .form-info{
+    $box-shadow: rgb(200, 53, 72);
+    $border-color: rgb(248, 70, 70);
+
     color: #333;
     font-size: 1.6rem;
     margin: 0.8rem 0;
@@ -36,6 +48,19 @@
         padding: 0.4rem 0.8rem;
     }
 
+    textarea{
+        width: 100%;
+        min-height: 10rem;
+        padding: 0.4rem 0.8rem;
+        outline: none;
+        border: 1px solid rgb(223, 217, 217);
+
+        &:focus{
+            border-color: $border-color;
+            box-shadow: 0 0 5px $box-shadow;
+        }
+    }
+
     input {
         width: 100%;
         padding: 0.4rem 0.8rem;
@@ -43,8 +68,8 @@
         border: 1px solid rgb(223, 217, 217);
 
         &:focus{
-            border: 1px solid rgb(255, 161, 161);
-            box-shadow: 0 0 5px rgb(252, 156, 156);
+            border-color: $border-color;
+            box-shadow: 0 0 5px $box-shadow;
         }
     }
 }

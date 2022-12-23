@@ -17,7 +17,6 @@ function Order({ className }) {
         const getData = async () => {
             if (user && user.idUser) {
                 const res = await orderServices.getOrdersByIdUser(user.idUser);
-                console.log(res);
                 if (res) {
                     setOrders(res);
                 }

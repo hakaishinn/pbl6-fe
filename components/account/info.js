@@ -5,6 +5,7 @@ import styles from '/styles/account/info.module.scss';
 import { AppContext } from '/context/appProvider.js';
 
 import * as authServices from '/services/authServices'
+import { Loading } from '../loading';
 
 
 const cx = classNames.bind(styles);
@@ -13,17 +14,25 @@ function Info({ className }) {
     const { user, setUser } = useContext(AppContext);
     const [currentUser, setCurrentUser] = useState(user);
     const [isUpdate, setIsUpdate] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    
 
     const handleUpdate = async() => {
-        const res = await authServices.updateUserById(currentUser)
-        if(res && res.status === 'Success'){
-            alert("Cập nhật thành công")
-            localStorage.setItem('userToken', JSON.stringify(currentUser))
-            setUser(currentUser)
-            setIsUpdate(false)
-            
+        if(JSON.stringify(currentUser) !== JSON.stringify(user)){
+            setIsLoading(true)
+            const res = await authServices.updateUserById(currentUser)
+            if(res && res.status === 'Success'){
+                localStorage.setItem('userToken', JSON.stringify(currentUser))
+                setUser(currentUser)
+                setIsUpdate(false)
+                setIsLoading(false)
+                
+            } else {
+                setIsLoading(false)
+                alert('Cập nhật thất bại')
+            }
         } else {
-            alert('Cập nhật thất bại')
+            setIsUpdate(false)
         }
     };
 
@@ -33,6 +42,7 @@ function Info({ className }) {
 
     return (
         <div className={className}>
+            {isLoading && <Loading isOverlay={true}></Loading>}
             <h2 className={cx('title')}>Tài khoản của bạn</h2>
             {currentUser && (
                 <div className={cx('wrapper')}>
@@ -72,10 +82,10 @@ function Info({ className }) {
                     <div className={cx('form-info')}>
                         <p>Địa chỉ:</p>
                         {isUpdate ? (
-                            <input
+                            <textarea
                                 value={currentUser.address}
                                 onChange={(e) => setCurrentUser((prev) => ({ ...prev, address: e.target.value }))}
-                            ></input>
+                            ></textarea>
                         ) : (
                             <span>{currentUser.address}</span>
                         )}
@@ -84,10 +94,14 @@ function Info({ className }) {
                     {isUpdate ? (
                         <>
                             <button onClick={handleUpdate}>Cập nhật</button>{' '}
-                            <button onClick={() => setIsUpdate(false)}>Hủy</button>
+                            <button className={cx('danger')} onClick={() => setIsUpdate(false)}>Hủy</button>
                         </>
                     ) : (
-                        <button onClick={() => setIsUpdate(true)}>Sửa</button>
+                        <div className={cx('btn-space')}>
+                            <button onClick={() => setIsUpdate(true)}>Sửa</button>
+                            <button className={cx('danger')} onClick={() => {}}>Đổi mật khẩu</button>
+                        </div>
+
                     )}
                 </div>
             )}

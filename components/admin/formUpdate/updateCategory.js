@@ -17,10 +17,11 @@ function UpdateCategory({ category, setShowUpdate, setCategories }) {
         }
     };
     return (
-        <div className={cx('overlay')}>
+        <div className={cx('overlay')} onClick={() => setShowUpdate(false)}>
             {category && (
-                <div className={cx('wrapper')}>
+                <div className={cx('wrapper')} onClick={(e) => e.stopPropagation()}>
                     <h2>Cập nhật thể loại truyện</h2>
+                    <span className={cx('icon-close')} onClick={() => setShowUpdate(false)}>&#x2716;</span>
 
                     <div className={cx('form-input')}>
                         <label htmlFor="idCategory">ID</label>
@@ -38,7 +39,7 @@ function UpdateCategory({ category, setShowUpdate, setCategories }) {
                     </div>
 
                     <button onClick={handleUpdate}>Lưu</button>
-                    <button onClick={() => setShowUpdate(false)}>Đóng</button>
+                    <button className={cx('btn-close')} onClick={() => setShowUpdate(false)}>Đóng</button>
                 </div>
             )}
         </div>

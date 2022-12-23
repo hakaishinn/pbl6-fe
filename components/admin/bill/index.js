@@ -9,31 +9,34 @@ const cx = classNames.bind(styles);
 
 function Bill() {
     const [orders, setOrders] = useState(null);
-    const [ordersSort, setOrdersSort] = useState([])
-    
-    const handleChange = (id, status) => {
-        orderServices.updateStatusOrder(parseInt(id), status)
-    }
 
-    const handleSort = (e) => {
-        if(e.target.value === 'no'){
-            setOrdersSort(orders)
-        } else if(e.target.value === 'Wait for pay'){
-            const resWait = orders.filter(item => item.status === 'Wait for pay')
-            setOrdersSort(resWait)
-        } else if (e.target.value === 'Paid'){
-            const resPaid = orders.filter(item => item.status === 'Paid')
-            setOrdersSort(resPaid)
+    const handleChange = async (id, status) => {
+        await orderServices.updateStatusOrder(parseInt(id), status);
+    };
+
+    const handleSort = async (e) => {
+        const orders = await orderServices.getOrders({ page: 1, size: 9 });
+        if (orders && orders.data) {
+            if (e.target.value === 'no') {
+                setOrders(orders.data);
+            } else if (e.target.value === 'Wait for pay') {
+                const resWait = orders.data.filter((item) => item.status === 'Wait for pay');
+                setOrders(resWait);
+            } else if (e.target.value === 'Paid') {
+                const resPaid = orders.data.filter((item) => item.status === 'Paid');
+                setOrders(resPaid);
+            } else if (e.target.value === 'Cancel') {
+                const resPaid = orders.data.filter((item) => item.status === 'Cancel');
+                setOrders(resPaid);
+            }
         }
-    }
+    };
 
     useEffect(() => {
         const getData = async () => {
             const res = await orderServices.getOrders({ page: 1, size: 9 });
-            console.log(res);
             if (res && res.data) {
                 setOrders(res.data);
-                setOrdersSort(res.data)
             }
         };
         getData();
@@ -52,6 +55,7 @@ function Bill() {
                         <option value={'no'}>Mặc định</option>
                         <option value={'Wait for pay'}>Wait for pay</option>
                         <option value={'Paid'}>Paid</option>
+                        <option value={'Cancel'}>Cancel</option>
                     </select>
                 </div>
                 <table>
@@ -66,8 +70,8 @@ function Bill() {
                         </tr>
                     </thead>
                     <tbody>
-                        {ordersSort &&
-                            ordersSort.map((item) => (
+                        {orders &&
+                            orders.map((item) => (
                                 <tr key={item.idOrder}>
                                     <td>{item.idOrder}</td>
                                     <td>{item.nameUser}</td>
@@ -78,12 +82,18 @@ function Bill() {
                                     </td>
                                     <td>{new Date(item.dateOrder).toLocaleString()}</td>
                                     <td>
-                                        <select defaultValue={item.status} onChange={(e) => handleChange(item.idOrder, e.target.value)}>
+                                        <select
+                                            defaultValue={item.status}
+                                            onChange={(e) => handleChange(item.idOrder, e.target.value)}
+                                        >
                                             <option name={'status'} value={'Wait for pay'}>
                                                 Wait for pay
                                             </option>
                                             <option name={'status'} value={'Paid'}>
                                                 Paid
+                                            </option>
+                                            <option name={'status'} value={'Cancel'}>
+                                                Cancel
                                             </option>
                                         </select>
                                     </td>

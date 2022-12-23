@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import styles from '/styles/admin/formUpdate/category.module.scss';
 
 import * as productsServices from '/services/productsServices';
@@ -7,6 +7,8 @@ import * as productsServices from '/services/productsServices';
 const cx = classNames.bind(styles);
 
 function UpdateProduct({ setShowUpdate, categories, productItem, products, setProducts, page, filter }) {
+    const inputRef = useRef();
+    const imageRef = useRef();
     const [product, setProduct] = useState({
         name: productItem.name,
         image: productItem.image,
@@ -60,37 +62,48 @@ function UpdateProduct({ setShowUpdate, categories, productItem, products, setPr
         }
     };
     return (
-        <div className={cx('overlay')}>
-            (
-            <div className={cx('wrapper')}>
+        <div className={cx('overlay')} onClick={() => setShowUpdate(false)}>
+            <div className={cx('wrapper')} onClick={(e) => e.stopPropagation()}>
                 <h2>Cập nhật truyện</h2>
+                <span className={cx('icon-close')} onClick={() => setShowUpdate(false)}>&#x2716;</span>
 
                 <div className={cx('form-input')}>
                     <label htmlFor="name">Tên truyện</label>
                     <input
                         id={'name'}
-                        placeholder="Tên thể loại"
+                        placeholder="Tên truyện"
                         value={product.name}
                         onChange={(e) => setProduct((prev) => ({ ...prev, name: e.target.value }))}
                     ></input>
                 </div>
-                <div className={cx('form-input')}>
-                    <label htmlFor="image">URL hình ảnh</label>
-                    <input
-                        id={'image'}
-                        placeholder="URL hình ảnh"
-                        value={product.image}
-                        onChange={(e) => setProduct((prev) => ({ ...prev, image: e.target.value }))}
-                    ></input>
+
+                <input
+                    className={cx('inputUploadAdd')}
+                    id="inputUploadUpdate"
+                    ref={inputRef}
+                    type={'file'}
+                    onChange={(e) => {
+                        imageRef.current.src = `/imageProduct/${e.target.files[0].name}`;
+                        setProduct((prev) => ({ ...prev, image: `/imageProduct/${e.target.files[0].name}` }));
+                    }}
+                ></input>
+                <label className={cx('lb-upload')} htmlFor="inputUploadUpdate">
+                    Chọn hình ảnh
+                </label>
+                <br></br>
+
+                <div className={cx('image-preview')}>
+                    <img ref={imageRef} src={product.image}></img>
                 </div>
+
                 <div className={cx('form-input')}>
                     <label htmlFor="desc">Mô tả</label>
-                    <input
+                    <textarea
                         id={'desc'}
                         placeholder="Mô tả"
                         value={product.desc}
                         onChange={(e) => setProduct((prev) => ({ ...prev, desc: e.target.value }))}
-                    ></input>
+                    ></textarea>
                 </div>
                 <div className={cx('form-input')}>
                     <label htmlFor="price">Đơn giá</label>
@@ -134,9 +147,8 @@ function UpdateProduct({ setShowUpdate, categories, productItem, products, setPr
                 </div>
 
                 <button onClick={handleUpdate}>Cập nhật</button>
-                <button onClick={() => setShowUpdate(false)}>Đóng</button>
+                <button className={cx('btn-close')} onClick={() => setShowUpdate(false)}>Đóng</button>
             </div>
-            )
         </div>
     );
 }

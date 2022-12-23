@@ -4,32 +4,34 @@ import { useContext, useState } from 'react';
 import styles from '/styles/checkouts/information.module.scss';
 import { AppContext } from '/context/appProvider.js';
 import { UserIcon } from '../Icons';
-import * as orderServices from '/services/orderServices'
+import * as orderServices from '/services/orderServices';
 import { useRouter } from 'next/router';
+import { Loading } from '../loading';
 
 const cx = classNames.bind(styles);
 function Information({ className }) {
-    const router = useRouter()
+    const router = useRouter();
     const { user, setCartItem } = useContext(AppContext);
     const [address, setAddress] = useState('');
     const [phone, setPhone] = useState('');
-    const [method, setMethod] = useState('order')
+    const [method, setMethod] = useState('order');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleOrderOrPay = async() => {
-        if(method === 'order'){
-            const res = await orderServices.createOrders(user.idUser, address, phone)
-            if(res && res.status === 'Success'){
-                setCartItem([])
-                alert("Đặt hàng thành công")
-                router.push('/account')
-            } else {
-                alert("Đặt hàng thất bại")
+    const handleOrderOrPay = async () => {
+        if (method === 'order') {
+            setIsLoading(true);
+            const res = await orderServices.createOrders(user.idUser, address, phone);
+            if (res && res.status === 'Success') {
+                setCartItem([]);
+                router.push('/account');
             }
+            setIsLoading(false);
         }
-    }
+    };
 
     return (
         <div className={className}>
+            {isLoading && <Loading isOverlay={true}></Loading>}
             <h2 className={cx('title')}>Thông tin giao hàng</h2>
             <div className={cx('user')}>
                 <div className={cx('avatar')}>
@@ -63,8 +65,9 @@ function Information({ className }) {
                     <label htmlFor="vnpay">Thanh toán bằng VN-Pay</label>
                 </div>
             </div>
-            <button className={cx('btn-pay')} onClick={handleOrderOrPay}>{method==='order' ? 'Đặt hàng' : 'Đặt hàng và Thanh toán'}</button>
-            
+            <button className={cx('btn-pay')} onClick={handleOrderOrPay}>
+                {method === 'order' ? 'Đặt hàng' : 'Đặt hàng và Thanh toán'}
+            </button>
         </div>
     );
 }

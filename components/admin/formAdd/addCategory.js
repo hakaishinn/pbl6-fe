@@ -17,18 +17,19 @@ function AddCategory({ setShowAdd, setCategories }) {
         }
     }
     return (
-        <div className={cx('overlay')}>
+        <div className={cx('overlay')} onClick={() => setShowAdd(false)}>
             (
-                <div className={cx('wrapper')}>
+                <div className={cx('wrapper')} onClick={(e) => e.stopPropagation()}>
                     <h2>Thêm thể loại truyện</h2>
+                    <span className={cx('icon-close')} onClick={() => setShowAdd(false)}>&#x2716;</span>
 
                     <div className={cx('form-input')}>
-                        <label htmlFor="name">Tên truyện</label>
+                        <label htmlFor="name">Tên thể loại truyện</label>
                         <input id={'name'} placeholder="Tên thể loại" value={name} onChange={(e) => setName(e.target.value)}></input>
                     </div>
 
                     <button onClick={handleAdd}>Lưu</button>
-                    <button onClick={() => setShowAdd(false)}>Đóng</button>
+                    <button className={cx('btn-close')} onClick={() => setShowAdd(false)}>Đóng</button>
                 </div>
             )
         </div>
