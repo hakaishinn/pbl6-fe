@@ -12,6 +12,7 @@ function MyApp({ Component, pageProps }) {
                     content="Web bán truyện tranh, light novel, truyện nguyên bộ, truyện trinh thám - kinh dị...và nhiều thể loại hay khác"
                 ></meta>
                 <meta property='og:title' content='Hikaru Shop'></meta>
+                <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"></meta>
                 <link rel="shortcut icon" href="/images/favicon.png" />
             </Head>
             <AppProvider>

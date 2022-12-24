@@ -2,7 +2,7 @@ import axios from 'axios';
 import https from 'https';
 
 const request = axios.create({
-    baseURL: 'http://sisanonhkone-001-site1.atempurl.com/api/',
+    baseURL: process.env.NEXT_PUBLIC_URL_API,
     httpsAgent: new https.Agent({
         rejectUnauthorized: false,
     }),
