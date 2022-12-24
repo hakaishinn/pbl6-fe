@@ -6,6 +6,11 @@ const request = axios.create({
     httpsAgent: new https.Agent({
         rejectUnauthorized: false,
     }),
+    headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Referer': 'https://hikarushop.vercel.app/',
+        'Referrer-Policy': 'strict-origin-when-cross-origin',
+    },
 });
 
 request.interceptors.request.use(async (config) => {
