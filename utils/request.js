@@ -8,8 +8,7 @@ const request = axios.create({
     }),
     headers: {
         'Access-Control-Allow-Origin': '*',
-        'Referer': 'https://hikarushop.vercel.app/',
-        'Referrer-Policy': 'strict-origin-when-cross-origin',
+        'Referrer-Policy': 'unsafe_url',
     },
 });
 
