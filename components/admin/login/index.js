@@ -39,14 +39,11 @@ function Login() {
     };
     return (
         <>
-            <div className={cx('overlay')} onClick={() => setIsShowLogin(false)}>
-                <div className={cx('form-login')} onClick={(e) => e.stopPropagation()}>
+            <div className={cx('overlay')}>
+                <div className={cx('form-login')}>
                     <div className={cx('header')}>
                         <div className={cx('header-title')}>
                             <h2>Đăng nhập</h2>
-                            <button className={cx('close')} onClick={() => setIsShowLogin(false)}>
-                                <CloseIcon></CloseIcon>
-                            </button>
                         </div>
                     </div>
                     <div className={cx('form-body')}>

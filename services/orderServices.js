@@ -44,6 +44,23 @@ export const updateStatusOrder = async (id, status) => {
     }
 };
 
+export const updateStatusOrderVnPay = async (idOrder, vnpayResponseCode) => {
+    try {
+        const res = await request.put(
+            `order/vnpay/${idOrder}`,
+            {},
+            {
+                params: {
+                    vnpay: vnpayResponseCode,
+                },
+            },
+        );
+        return res.data;
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
 export const createOrders = async (idUser, address, phone) => {
     try {
         const res = await request.post(
@@ -54,6 +71,16 @@ export const createOrders = async (idUser, address, phone) => {
                 sdt: phone,
             },
         );
+        return res.data;
+    } catch (error) {
+        console.log('Loi: ', error.message);
+    }
+};
+
+
+export const getStatistical = async (month, year, params={}) => {
+    try {
+        const res = await request.get(`order/income/${month}and${year}`, {params});
         return res.data;
     } catch (error) {
         console.log('Loi: ', error.message);

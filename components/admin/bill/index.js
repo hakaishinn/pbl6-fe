@@ -15,7 +15,7 @@ function Bill() {
     };
 
     const handleSort = async (e) => {
-        const orders = await orderServices.getOrders({ page: 1, size: 9 });
+        const orders = await orderServices.getOrders();
         if (orders && orders.data) {
             if (e.target.value === 'no') {
                 setOrders(orders.data);
@@ -34,7 +34,7 @@ function Bill() {
 
     useEffect(() => {
         const getData = async () => {
-            const res = await orderServices.getOrders({ page: 1, size: 9 });
+            const res = await orderServices.getOrders();
             if (res && res.data) {
                 setOrders(res.data);
             }

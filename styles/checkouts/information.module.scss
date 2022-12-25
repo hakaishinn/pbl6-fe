@@ -33,16 +33,15 @@
 
 .input {
     width: 85%;
-    height: 4.2rem;
     color: #333;
     font-size: 1.6rem;
     border-radius: 4px;
     overflow: hidden;
     outline: none;
     border: 1px solid #ccc;
-
+    line-height: 2.4rem;
     margin: 0.8rem 0;
-    padding-left: 0.8rem;
+    padding: 0.8rem;
 
     &:focus {
         border-color: #66afe9;

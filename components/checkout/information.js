@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import styles from '/styles/checkouts/information.module.scss';
 import { AppContext } from '/context/appProvider.js';
@@ -11,11 +11,23 @@ import { Loading } from '../loading';
 const cx = classNames.bind(styles);
 function Information({ className }) {
     const router = useRouter();
-    const { user, setCartItem } = useContext(AppContext);
+    const { user, setCartItem, cartItem } = useContext(AppContext);
     const [address, setAddress] = useState('');
     const [phone, setPhone] = useState('');
     const [method, setMethod] = useState('order');
     const [isLoading, setIsLoading] = useState(false);
+
+    const total = () => {
+        var total;
+        if (cartItem && cartItem?.length > 0) {
+            total = cartItem.reduce(
+                (acc, item) =>
+                    acc + (item.product.price - item.product.price * item.product.discount) * item.quantityCart,
+                0,
+            );
+        }
+        return total ? total : 0;
+    };
 
     const handleOrderOrPay = async () => {
         if (method === 'order') {
@@ -26,8 +38,27 @@ function Information({ className }) {
                 router.push('/account');
             }
             setIsLoading(false);
+        } else {
+            setIsLoading(true);
+            const res = await orderServices.createOrders(user.idUser, address, phone);
+            if (res && res.status === 'Success') {
+                setCartItem([]);
+                router.push({
+                    pathname: '/vnpay/create',
+                    query: { id: res.data.idOrder, price: total() },
+                });
+            }
+
+            setIsLoading(false);
         }
     };
+
+    useEffect(() => {
+        if (user) {
+            setAddress(user.address);
+            setPhone(user.contact);
+        }
+    }, [JSON.stringify(user)]);
 
     return (
         <div className={className}>
