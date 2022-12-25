@@ -2,14 +2,14 @@ import axios from 'axios';
 import https from 'https';
 
 const request = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_URL_API,
+    baseURL: 'http://sisanonhkone-001-site1.atempurl.com/api/',
     httpsAgent: new https.Agent({
         rejectUnauthorized: false,
     }),
-    headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Referrer-Policy': 'unsafe_url',
-    },
+    // headers: {
+    //     'Access-Control-Allow-Origin': '*',
+    //     'Referrer-Policy': 'unsafe_url',
+    // },
 });
 
 request.interceptors.request.use(async (config) => {
