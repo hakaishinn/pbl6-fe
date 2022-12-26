@@ -10,7 +10,6 @@ import IconContact from '../../components/iconContact';
 
 function DefaultLayout({ children }) {
     const { isShowLogin, isShowRegister } = useContext(AppContext);
-
     return (
         <>
             <Header></Header>

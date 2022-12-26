@@ -2,8 +2,6 @@ import classNames from 'classnames/bind';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import styles from '/styles/vnpay/create.module.scss';
-import axios from 'axios';
-import { sha512 } from 'js-sha512';
 import * as vnpayServices from '/services/vnpayServices';
 
 const cx = classNames.bind(styles);
@@ -15,66 +13,15 @@ function Create() {
     const [orderDesc, setOrderDesc] = useState('Noi dung thanh toan');
     const [bankCode, setBankCode] = useState('NCB');
     const [url, setUrl] = useState('');
-    // const [ip, setIP] = useState('');
-
-    const getDate = () => {
-        const d = new Date();
-        if (d.getHours() / 10 === 0) {
-            return `${d.getFullYear()}${
-                d.getMonth() + 1
-            }${d.getDate()}${d.getHours()}${d.getMinutes()}${d.getSeconds()}`;
-        } else {
-            return `${d.getFullYear()}${d.getMonth()}${d.getDate()}0${d.getHours()}${d.getMinutes()}${d.getSeconds()}`;
-        }
-    };
-    // const data = {
-    //     vnp_Amount: price * 100,
-    //     vnp_BankCode: bankCode,
-    //     vnp_Command: process.env.NEXT_PUBLIC_URL_COMMAND,
-    //     vnp_CreateDate: getDate(),
-    //     vnp_CurrCode: 'VND',
-    //     vnp_ExpireDate: '20221226063012',
-    //     vnp_IpAddr: ip,
-    //     vnp_Locale: 'vn',
-    //     vnp_OrderInfo: orderDesc,
-    //     vnp_OrderType: 'other',
-    //     vnp_ReturnUrl: process.env.NEXT_PUBLIC_URL_RETURN_URL,
-    //     vnp_TmnCode: process.env.NEXT_PUBLIC_VNP_TMNCODE,
-    //     vnp_TxnRef: getDate(),
-    //     vnp_Version: process.env.NEXT_PUBLIC_VNP_VERSION,
-    // };
 
     const handlePay = () => {
-        // var result = '';
-        // var i = 0;
-        // for (var key in data) {
-        //     if (i === 1) {
-        //         result += `&${encodeURI(key)}=${encodeURIComponent(data[key])}`;
-        //     } else {
-        //         result += `${encodeURI(key)}=${encodeURIComponent(data[key])}`;
-        //         i = 1;
-        //     }
-        // }
-        // const vnpSecureHash = sha512.hmac(process.env.NEXT_PUBLIC_VNP_HASHSECRET, result);
-
         router.push(url);
     };
-
-    //creating function to load ip address from the API
-    // const getData = async () => {
-    //     const res = await axios.get('https://geolocation-db.com/json/');
-    //     setIP(res.data.IPv4);
-    // };
-
-    // useEffect(() => {
-    //     //passing getData method to the lifecycle method
-    //     getData();
-    // }, []);
 
     useEffect(() => {
         const getData = async () => {
             if (id) {
-                const res = await vnpayServices.getLinkVnPay(id, 'orther', 0, orderDesc, bankCode, 'vn');
+                const res = await vnpayServices.getLinkVnPay(id, 'billpayment', 0, orderDesc, bankCode, 'vn');
                 console.log(res);
                 if(res){
                     setUrl(res)
@@ -100,7 +47,7 @@ function Create() {
                     id="order_id"
                     name="order_id"
                     type="text"
-                    value={getDate()}
+                    value={id || ''}
                     disabled
                 />
             </div>

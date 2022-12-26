@@ -40,7 +40,6 @@
     outline: none;
     border: 1px solid #ccc;
     line-height: 2.4rem;
-    margin: 0.8rem 0;
     padding: 0.8rem;
 
     &:focus {
@@ -67,6 +66,7 @@
     input {
         accent-color: var(--primary);
     }
+
 }
 
 .btn-pay {
@@ -81,4 +81,11 @@
     &:hover{
         background-color: #007bff;
     }
+}
+
+.message-error{
+    font-size: 1.2rem;
+    color: red;
+
+    opacity: 0;
 }

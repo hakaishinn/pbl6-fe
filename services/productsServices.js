@@ -45,6 +45,15 @@ export const sortProductByPrice = async (idCategory, params={}) => {
     }
 };
 
+export const sortProductSearchByPrice = async (name, params={}) => {
+    try {
+        const res = await request.get(`products/orderby/name/${name}`,{params});
+        return res.data;
+    } catch (error) {
+        return [];
+    }
+};
+
 export const remove = async (id) => {
     try {
         request.delete(`products/${id}`);

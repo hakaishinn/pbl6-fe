@@ -78,9 +78,9 @@ export const createOrders = async (idUser, address, phone) => {
 };
 
 
-export const getStatistical = async (month, year, params={}) => {
+export const getStatistical = async (year, params={}) => {
     try {
-        const res = await request.get(`order/income/${month}and${year}`, {params});
+        const res = await request.get(`order/income/${year}`, {params});
         return res.data;
     } catch (error) {
         console.log('Loi: ', error.message);

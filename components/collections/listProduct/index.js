@@ -21,16 +21,30 @@ function ListProduct({ isSearch, data, setData, sortPrice, setSortPrice }) {
     const pageCount = data?.data?.totalPage || 0;
 
     const handlePageClick = async (event) => {
-        if (sortPrice) {
-            router.push({
-                pathname: `/collections/${category_id}`,
-                query: { page: event.selected + 1, sortPrice: sortPrice },
-            });
+        if (isSearch) {
+            if (sortPrice) {
+                router.push({
+                    pathname: `/search/${name}`,
+                    query: { page: event.selected + 1, sortPrice: sortPrice },
+                });
+            } else {
+                router.push({
+                    pathname: `/search/${name}`,
+                    query: { page: event.selected + 1 },
+                });
+            }
         } else {
-            router.push({
-                pathname: `/collections/${category_id}`,
-                query: { page: event.selected + 1 },
-            });
+            if (sortPrice) {
+                router.push({
+                    pathname: `/collections/${category_id}`,
+                    query: { page: event.selected + 1, sortPrice: sortPrice },
+                });
+            } else {
+                router.push({
+                    pathname: `/collections/${category_id}`,
+                    query: { page: event.selected + 1 },
+                });
+            }
         }
     };
 
@@ -38,20 +52,37 @@ function ListProduct({ isSearch, data, setData, sortPrice, setSortPrice }) {
         const loadData = async () => {
             if (isSearch) {
                 if (name && page) {
-                    const data = await productsServices.search(name, {
-                        page: page,
-                        size: 9,
-                    });
-                    setData(data);
-                } else if (name && !page) {
-                    const data = await productsServices.search(name, {
-                        page: 1,
-                        size: 9,
-                    });
-                    setData(data);
+                    if (sortPrice) {
+                        const data = await productsServices.sortProductSearchByPrice(name, {
+                            star: parseInt(sortPrice.split('-')[0]),
+                            end: parseInt(sortPrice.split('-')[1]),
+                            page: page,
+                            size: 9,
+                        });
+                        setData(data);
+                    } else {
+                        const data = await productsServices.search(name, {
+                            page: page,
+                            size: 9,
+                        });
 
-                    if (paginateRef?.current) {
-                        paginateRef.current.state.selected = 0;
+                        setData(data);
+                    }
+                } else if (name && !page) {
+                    if (sortPrice) {
+                        const data = await productsServices.sortProductSearchByPrice(name, {
+                            star: parseInt(sortPrice.split('-')[0]),
+                            end: parseInt(sortPrice.split('-')[1]),
+                            page: 1,
+                            size: 9,
+                        });
+                        setData(data);
+                    } else {
+                        const data = await productsServices.search(name, {
+                            page: 1,
+                            size: 9,
+                        });
+                        setData(data);
                     }
                 }
             } else {
@@ -69,6 +100,7 @@ function ListProduct({ isSearch, data, setData, sortPrice, setSortPrice }) {
                             page: page,
                             size: 9,
                         });
+
                         setData(data);
                     }
                 } else if (category_id && !page) {
@@ -86,9 +118,6 @@ function ListProduct({ isSearch, data, setData, sortPrice, setSortPrice }) {
                             size: 9,
                         });
 
-                        if (paginateRef?.current) {
-                            paginateRef.current.state.selected = 0;
-                        }
                         setData(data);
                     }
                 }
@@ -124,7 +153,9 @@ function ListProduct({ isSearch, data, setData, sortPrice, setSortPrice }) {
                     nextLinkClassName={cx('page-num')}
                     activeLinkClassName={cx('active')}
                 />
-            ) : <h2>Không có sản phẩm nào</h2>}
+            ) : (
+                <h2>Không có sản phẩm nào</h2>
+            )}
         </>
     );
 }

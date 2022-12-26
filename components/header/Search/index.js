@@ -10,7 +10,9 @@ function Search() {
     const router = useRouter()
     const [value, setValue] = useState('');
     const handleSearch = () => {
-        router.push(`/search/${value}`)
+        if(value.length > 0){
+            router.push(`/search/${encodeURI(value.trim())}`)
+        }
     }
     return (
         <div className={cx('search')}>

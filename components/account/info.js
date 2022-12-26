@@ -1,44 +1,75 @@
 import classNames from 'classnames/bind';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 
 import styles from '/styles/account/info.module.scss';
 import { AppContext } from '/context/appProvider.js';
 
-import * as authServices from '/services/authServices'
+import * as authServices from '/services/authServices';
 import { Loading } from '../loading';
-
+import validator from '/utils/validator';
 
 const cx = classNames.bind(styles);
 
 function Info({ className }) {
+    const nameRef = useRef();
+    const errorNameRef = useRef();
+    const phoneRef = useRef();
+    const errorPhoneRef = useRef();
     const { user, setUser } = useContext(AppContext);
     const [currentUser, setCurrentUser] = useState(user);
     const [isUpdate, setIsUpdate] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    
 
-    const handleUpdate = async() => {
-        if(JSON.stringify(currentUser) !== JSON.stringify(user)){
-            setIsLoading(true)
-            const res = await authServices.updateUserById(currentUser)
-            if(res && res.status === 'Success'){
-                localStorage.setItem('userToken', JSON.stringify(currentUser))
-                setUser(currentUser)
-                setIsUpdate(false)
-                setIsLoading(false)
-                
+    const handleUpdate = async () => {
+        const isName = validator(nameRef, errorNameRef, ['required']);
+        const isPhone = validator(phoneRef, errorPhoneRef, ['required', 'phone']);
+
+        if (isName && isPhone) {
+            if (JSON.stringify(currentUser) !== JSON.stringify(user)) {
+                setIsLoading(true);
+                const res = await authServices.updateUserById(currentUser);
+                if (res && res.status === 'Success') {
+                    localStorage.setItem('userToken', JSON.stringify(currentUser));
+                    setUser(currentUser);
+                    setIsUpdate(false);
+                    setIsLoading(false);
+                } else {
+                    setIsLoading(false);
+                    alert('Cập nhật thất bại');
+                }
             } else {
-                setIsLoading(false)
-                alert('Cập nhật thất bại')
+                setIsUpdate(false);
             }
-        } else {
-            setIsUpdate(false)
         }
     };
 
     useEffect(() => {
         setCurrentUser(user);
     }, [JSON.stringify(user)]);
+
+    useEffect(() => {
+        if (nameRef.current) {
+            nameRef.current.addEventListener('blur', () => {
+                validator(nameRef, errorNameRef, ['required']);
+            });
+
+            nameRef.current.addEventListener('input', () => {
+                nameRef.current.classList.remove('error');
+                errorNameRef.current.style.opacity = 0;
+            });
+        }
+
+        if (phoneRef.current) {
+            phoneRef.current.addEventListener('blur', () => {
+                validator(phoneRef, errorPhoneRef, ['required', 'phone']);
+            });
+
+            phoneRef.current.addEventListener('input', () => {
+                phoneRef.current.classList.remove('error');
+                errorPhoneRef.current.style.opacity = 0;
+            });
+        }
+    }, [nameRef.current]);
 
     return (
         <div className={className}>
@@ -49,10 +80,16 @@ function Info({ className }) {
                     <div className={cx('form-info')}>
                         <p>Tên hiển thị:</p>
                         {isUpdate ? (
-                            <input
-                                value={currentUser.name}
-                                onChange={(e) => setCurrentUser((prev) => ({ ...prev, name: e.target.value }))}
-                            ></input>
+                            <>
+                                <input
+                                    ref={nameRef}
+                                    value={currentUser.name}
+                                    onChange={(e) => setCurrentUser((prev) => ({ ...prev, name: e.target.value }))}
+                                ></input>
+                                <span ref={errorNameRef} className={cx('message-error')}>
+                                    Không được để trống trường này
+                                </span>
+                            </>
                         ) : (
                             <span>{currentUser.name}</span>
                         )}
@@ -60,10 +97,14 @@ function Info({ className }) {
                     <div className={cx('form-info')}>
                         <p>Email:</p>
                         {isUpdate ? (
-                            <input
-                                value={currentUser.email}
-                                onChange={(e) => setCurrentUser((prev) => ({ ...prev, email: e.target.value }))}
-                            ></input>
+                            <p>
+                                <input
+                                    value={currentUser.email}
+                                    // onChange={(e) => setCurrentUser((prev) => ({ ...prev, email: e.target.value }))}
+                                    disabled
+                                ></input>
+                                <span className={cx('message-error')}>Không được để trống trường này</span>
+                            </p>
                         ) : (
                             <span>{currentUser.email}</span>
                         )}
@@ -71,10 +112,16 @@ function Info({ className }) {
                     <div className={cx('form-info')}>
                         <p>Số điện thoại:</p>
                         {isUpdate ? (
-                            <input
-                                value={currentUser.contact}
-                                onChange={(e) => setCurrentUser((prev) => ({ ...prev, contact: e.target.value }))}
-                            ></input>
+                            <>
+                                <input
+                                    ref={phoneRef}
+                                    value={currentUser.contact}
+                                    onChange={(e) => setCurrentUser((prev) => ({ ...prev, contact: e.target.value }))}
+                                ></input>
+                                <span ref={errorPhoneRef} className={cx('message-error')}>
+                                    Không được để trống trường này
+                                </span>
+                            </>
                         ) : (
                             <span>{currentUser.contact}</span>
                         )}
@@ -94,14 +141,17 @@ function Info({ className }) {
                     {isUpdate ? (
                         <>
                             <button onClick={handleUpdate}>Cập nhật</button>{' '}
-                            <button className={cx('danger')} onClick={() => setIsUpdate(false)}>Hủy</button>
+                            <button className={cx('danger')} onClick={() => setIsUpdate(false)}>
+                                Hủy
+                            </button>
                         </>
                     ) : (
                         <div className={cx('btn-space')}>
                             <button onClick={() => setIsUpdate(true)}>Sửa</button>
-                            <button className={cx('danger')} onClick={() => {}}>Đổi mật khẩu</button>
+                            <button className={cx('danger')} onClick={() => {}}>
+                                Đổi mật khẩu
+                            </button>
                         </div>
-
                     )}
                 </div>
             )}

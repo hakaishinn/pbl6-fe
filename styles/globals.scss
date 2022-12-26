@@ -35,3 +35,13 @@ body {
     width: 100%;
     overflow: hidden !important;
 }
+
+body input.error {
+    border-color: red;
+    box-shadow: 0 0 2px red;
+
+    &:focus {
+        border-color: red;
+        box-shadow: 0 0 2px red;
+    }
+}
