@@ -1,6 +1,6 @@
 import request from '/utils/request';
 
-export const getLinkVnPay = async (idOrder, loaiHH, price, noiDung, bank, ngonNgu) => {
+export const getLinkVnPay = async (idOrder, loaiHH, price, noiDung, bank, ngonNgu, returnUrl) => {
     try {
         const res = await request.post(
             'vnpay',
@@ -13,7 +13,8 @@ export const getLinkVnPay = async (idOrder, loaiHH, price, noiDung, bank, ngonNg
             },
             {
                 params: {
-                    id: idOrder
+                    id: idOrder,
+                    returnUrl: returnUrl
                 }
             },
         );

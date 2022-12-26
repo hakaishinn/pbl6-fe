@@ -10,7 +10,7 @@ function Create() {
     const router = useRouter();
 
     const { price, id } = router.query;
-    const [orderDesc, setOrderDesc] = useState('Noi dung thanh toan');
+    const [orderDesc, setOrderDesc] = useState(`Thanh toan don hang ${id}`);
     const [bankCode, setBankCode] = useState('NCB');
     const [url, setUrl] = useState('');
 
@@ -21,7 +21,7 @@ function Create() {
     useEffect(() => {
         const getData = async () => {
             if (id) {
-                const res = await vnpayServices.getLinkVnPay(id, 'billpayment', 0, orderDesc, bankCode, 'vn');
+                const res = await vnpayServices.getLinkVnPay(id, 'billpayment', 0, orderDesc, bankCode, 'vn', process.env.NEXT_PUBLIC_RETURN_URL);
                 console.log(res);
                 if(res){
                     setUrl(res)
