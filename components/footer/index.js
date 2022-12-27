@@ -19,25 +19,25 @@ function Footer({ landing = false }) {
                         <h4 className={cx('title')}>WEBSITE THUỘC QUYỀN</h4>
                         
                         <p>Công Ty Cổ Phần Xuất Bản và Thương mại HIKARU</p>
-                        <p>Mã Số Thuế: 0317420275 Do Sở Kế Hoạch và Đầu Tư Tp HCM cấp ngày 05/08/2022</p>
-                        <p>Trụ Sở Chính: 140 Đường Số 3, P.15, Q.11, TP HỒ CHÍ MINH</p>
+                        <p>Mã Số Thuế: 0317420275 Do Sở Kế Hoạch và Đầu Tư Tp Đà Nẵng cấp ngày 05/08/2022</p>
+                        <p>Trụ Sở Chính: 54 Nguyễn Lương Bằng, Hòa Khánh Bắc, Liên Chiểu, Đà Nẵng</p>
                     </div>
                     <div className={cx('contact')}>
                         <h4 className={cx('title')}>LIÊN HỆ</h4>
                         
                         <div className={cx('contact-item')}>
                             <LocationIcon></LocationIcon>
-                            <p>140 ĐƯỜNG SỐ 3 CƯ XÁ LỮ GIA, PHƯỜNG 15, QUẬN 11, TP HCM</p>
+                            <p>54 Nguyễn Lương Bằng, Hòa Khánh Bắc, Liên Chiểu, Đà Nẵng</p>
                         </div>
 
                         <div className={cx('contact-item')}>
                             <PhoneIcon></PhoneIcon>
-                            <p>090 998 28 73</p>
+                            <p>038 507 8386</p>
                         </div>
 
                         <div className={cx('contact-item')}>
                             <EmailIcon></EmailIcon>
-                            <p>cskh.hikaru.vn@gmail.com</p>
+                            <p>hikarushop@gmail.com</p>
                         </div>
                     </div>
                     <div className={cx('policy')}>
@@ -45,26 +45,17 @@ function Footer({ landing = false }) {
                         
                         <div className={cx('policy-item')}>
                             <ArrowNextIcon></ArrowNextIcon>
-                            <Link href="">Điều khoản sử dụng</Link>
+                            <Link href="/pages/provision">Điều khoản sử dụng</Link>
                         </div>
 
                         <div className={cx('policy-item')}>
                             <ArrowNextIcon></ArrowNextIcon>
-                            <Link href="">Chính sách thanh toán</Link>
+                            <Link href="/pages/pay">Chính sách thanh toán</Link>
                         </div>
 
                         <div className={cx('policy-item')}>
                             <ArrowNextIcon></ArrowNextIcon>
-                            <Link href="">Chính sách bảo mật</Link>
-                        </div>
-                        
-                        <div className={cx('policy-item')}>
-                            <ArrowNextIcon></ArrowNextIcon>
-                            <Link href="">Chính sách giao hàng</Link>
-                        </div>
-                        <div className={cx('policy-item')}>
-                            <ArrowNextIcon></ArrowNextIcon>
-                            <Link href="">Chính sách đổi trả</Link>
+                            <Link href="/pages/returngoods">Chính sách đổi trả</Link>
                         </div>
                     </div>
                     <div className={cx('fanpage')}>
@@ -72,29 +63,29 @@ function Footer({ landing = false }) {
                         
                         <div className={cx('social')}>
                             <div className={cx('social-item')}>
-                                <Link href="">
+                                <Link href="/">
                                     <FontAwesomeIcon icon={faFacebookF}></FontAwesomeIcon>
                                 </Link>
                             </div>
     
                             <div className={cx('social-item')}>
-                                <Link href="">
+                                <Link href="/">
                                     <FontAwesomeIcon icon={faTwitter}></FontAwesomeIcon>
                                 </Link>
                             </div>
     
                             <div className={cx('social-item')}>
-                                <Link href="">
+                                <Link href="/">
                                     <FontAwesomeIcon icon={faGoogle}></FontAwesomeIcon>
                                 </Link>
                             </div>
                             <div className={cx('social-item')}>
-                                <Link href="">
+                                <Link href="/">
                                     <FontAwesomeIcon icon={faInstagram}></FontAwesomeIcon>
                                 </Link>
                             </div>
                             <div className={cx('social-item')}>
-                                <Link href="">
+                                <Link href="/">
                                     <FontAwesomeIcon icon={faYoutube}></FontAwesomeIcon>
                                 </Link>
                             </div>

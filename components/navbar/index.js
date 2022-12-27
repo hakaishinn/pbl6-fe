@@ -98,12 +98,6 @@ function Navbar() {
                                         <li>
                                             <Link href="/pages/returngoods">Chính sách đổi trả</Link>
                                         </li>
-                                        <li>
-                                            <Link href="/pages/deliverycharges">Phí giao hàng</Link>
-                                        </li>
-                                        <li>
-                                            <Link href="/pages/deliverypolicy">Chính sách giao hàng</Link>
-                                        </li>
                                     </ul>
                                 </div>
                             )}
@@ -114,14 +108,6 @@ function Navbar() {
                                 </Link>
                             </li>
                         </HeadlessTippy>
-                    </span>
-
-                    <span>
-                        <li className={cx('li-nav')}>
-                            <Link href="/" className={cx('nav-item')}>
-                                LIÊN HỆ
-                            </Link>
-                        </li>
                     </span>
                 </ul>
             </div>
