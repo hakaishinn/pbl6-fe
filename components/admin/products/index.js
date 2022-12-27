@@ -115,17 +115,10 @@ function Products() {
 
     const handleSearch = async () => {
         if (search.trim().length === 0) return;
-        if (page) {
-            router.push({
-                pathname: `/admin/products`,
-                query: { page: page, name: search.trim() },
-            });
-        } else {
-            router.push({
-                pathname: `/admin/products`,
-                query: { page: 1, name: search.trim() },
-            });
-        }
+        router.push({
+            pathname: `/admin/products`,
+            query: { page: 1, name: search.trim() },
+        });
     };
     useEffect(() => {
         getData();
@@ -158,7 +151,7 @@ function Products() {
                 <div className={cx('header')}>
                     <select
                         onChange={(e) => {
-                            setSearch('')
+                            setSearch('');
                             setFilter(e.target.value);
                             router.push({
                                 pathname: `/admin/products`,

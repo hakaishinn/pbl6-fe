@@ -55,6 +55,8 @@ function AddProduct({ setShowAdd, categories, setProducts, page, filter }) {
                 }
             }
             setShowAdd(false);
+        } else {
+            alert('Vui lòng kiểm tra lại thông tin')
         }
     };
     return (

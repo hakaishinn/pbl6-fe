@@ -20,52 +20,57 @@ function UpdateProduct({ setShowUpdate, categories, productItem, products, setPr
         idCate: categories.find((item) => item.categoryType === productItem.cate).id,
     });
 
-    console.log('update', page);
-
     const handleUpdate = async () => {
-        const resUpdate = await productsServices.updateProduct(parseInt(productItem.idProduct), product);
-        if (resUpdate && resUpdate.status === 'Success') {
-            if (page) {
-                if (filter === 'all') {
-                    const products = await productsServices.getProducts({ page: parseInt(page), size: 9 });
+        if (product.price > 0 && product.quantity > 0 && product.discount >= 0) {
+            const resUpdate = await productsServices.updateProduct(parseInt(productItem.idProduct), product);
+            if (resUpdate && resUpdate.status === 'Success') {
+                if (page) {
+                    if (filter === 'all') {
+                        const products = await productsServices.getProducts({ page: parseInt(page), size: 9 });
+                        if (products) {
+                            setProducts(products);
+                        }
+                    } else {
+                        const products = await productsServices.getProductByCategoryId(parseInt(filter), {
+                            page: parseInt(page),
+                            size: 9,
+                        });
 
-                    if (products) {
-                        setProducts(products);
+                        if (products) {
+                            setProducts(products.data);
+                        }
                     }
-                } else {
-                    const products = await productsServices.getProductByCategoryId(parseInt(filter), {
-                        page: parseInt(page),
-                        size: 9,
-                    });
-
-                    if (products) {
-                        setProducts(products.data);
+                } else if (!page) {
+                    if (filter === 'all') {
+                        const products = await productsServices.getProducts({ page: 1, size: 9 });
+                        if (products) {
+                            setProducts(products);
+                        }
+                    } else {
+                        const products = await productsServices.getProductByCategoryId(parseInt(filter), {
+                            page: 1,
+                            size: 9,
+                        });
+                        if (products) {
+                            setProducts(products.data);
+                        }
                     }
                 }
-            } else if (!page) {
-                if (filter === 'all') {
-                    const products = await productsServices.getProducts({ page: 1, size: 9 });
-                    if (products) {
-                        setProducts(products);
-                    }
-                } else {
-                    const products = await productsServices.getProductByCategoryId(parseInt(filter), {
-                        page: 1,
-                        size: 9,
-                    });
-                    if (products) {
-                        setProducts(products.data);
-                    }
-                }
+                setShowUpdate(false);
+            } else {
+                alert('Vui lòng kiểm tra lại thông tin');
             }
-            setShowUpdate(false);
+        } else {
+            alert('Vui lòng kiểm tra lại thông tin');
         }
     };
     return (
         <div className={cx('overlay')} onClick={() => setShowUpdate(false)}>
             <div className={cx('wrapper')} onClick={(e) => e.stopPropagation()}>
                 <h2>Cập nhật truyện</h2>
-                <span className={cx('icon-close')} onClick={() => setShowUpdate(false)}>&#x2716;</span>
+                <span className={cx('icon-close')} onClick={() => setShowUpdate(false)}>
+                    &#x2716;
+                </span>
 
                 <div className={cx('form-input')}>
                     <label htmlFor="name">Tên truyện</label>
@@ -106,7 +111,7 @@ function UpdateProduct({ setShowUpdate, categories, productItem, products, setPr
                     ></textarea>
                 </div>
                 <div className={cx('form-input')}>
-                    <label htmlFor="price">Đơn giá</label>
+                    <label htmlFor="price">Đơn giá (VND)</label>
                     <input
                         id={'price'}
                         placeholder="Đơn giá"
@@ -147,7 +152,9 @@ function UpdateProduct({ setShowUpdate, categories, productItem, products, setPr
                 </div>
 
                 <button onClick={handleUpdate}>Cập nhật</button>
-                <button className={cx('btn-close')} onClick={() => setShowUpdate(false)}>Đóng</button>
+                <button className={cx('btn-close')} onClick={() => setShowUpdate(false)}>
+                    Đóng
+                </button>
             </div>
         </div>
     );

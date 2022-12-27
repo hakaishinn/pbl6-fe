@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import * as orderSevices from '/services/orderServices';
+import * as orderServices from '/services/orderServices';
 import classNames from 'classnames/bind';
 import styles from '/styles/vnpay/vnpay.module.scss'
 const cx= classNames.bind(styles)
@@ -16,16 +16,15 @@ function ReturnVnPay() {
         vnp_PayDate,
         vnp_SecureHash,
     } = router.query;
-    const [vncode, setVnCode] = useState(vnp_ResponseCode);
-    console.log(vnp_ResponseCode);
+    const [vnpResponseCode, setVnpResponseCode] = useState(vnp_ResponseCode);
 
     useEffect(() => {
-        setVnCode(vnp_ResponseCode);
+        setVnpResponseCode(vnp_ResponseCode);
     }, [vnp_ResponseCode]);
 
     useEffect(() => {
         if (vnp_ResponseCode == '00') {
-            orderSevices.updateStatusOrderVnPay(vnp_TxnRef, vnp_ResponseCode);
+            orderServices.updateStatusOrderVnPay(vnp_TxnRef, vnp_ResponseCode);
         }
     }, [vnp_ResponseCode]);
     return (
@@ -55,7 +54,7 @@ function ReturnVnPay() {
                     </div>
                     <div className={cx('form-group')}>
                         <label>Mã phản hồi (vnp_ResponseCode):</label>
-                        <span>{vnp_ResponseCode}</span>
+                        <span>{vnpResponseCode}</span>
                     </div>
                     <div className={cx('form-group')}>
                         <label>Mã GD Tại VNPAY:</label>

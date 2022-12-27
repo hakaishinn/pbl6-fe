@@ -13,7 +13,6 @@ function AdminLayout({ children, itemActive }) {
 
     useEffect(() => {
         const getUserToken = async () => {
-            console.log('provider>>>>>>', user);
             const userToken = await JSON.parse(localStorage.getItem('userToken'));
             setUser(userToken);
         };

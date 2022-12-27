@@ -10,26 +10,17 @@ function Create() {
     const router = useRouter();
 
     const { price, id } = router.query;
-    const [orderDesc, setOrderDesc] = useState(`Noi dung thanh toan`);
+    const [orderDesc, setOrderDesc] = useState(`Noi dung thanh toan (khong dau)`);
     const [bankCode, setBankCode] = useState('NCB');
-    const [url, setUrl] = useState('');
 
-    const handlePay = () => {
-        router.push(url);
-    };
-
-    useEffect(() => {
-        const getData = async () => {
-            if (id) {
-                const res = await vnpayServices.getLinkVnPay(id, 'billpayment', 0, orderDesc, bankCode, 'vn', process.env.NEXT_PUBLIC_RETURN_URL);
-                console.log(res);
-                if(res){
-                    setUrl(res)
-                }
+    const handlePay = async() => {
+        if (id) {
+            const res = await vnpayServices.getLinkVnPay(id, 'billpayment', 0, orderDesc, bankCode, 'vn', process.env.NEXT_PUBLIC_RETURN_URL);
+            if(res){
+                router.push(res);
             }
-        };
-        getData()
-    }, [id]);
+        }
+    };
 
     return (
         <div className="container">
@@ -112,7 +103,6 @@ function Create() {
                 <label htmlFor="language">Ngôn ngữ</label>
                 <select name="language" id="language" className={cx('form-control')}>
                     <option value="vn">Tiếng Việt</option>
-                    <option value="en">English</option>
                 </select>
             </div>
             <button className={cx('btn-pay')} onClick={handlePay}>
