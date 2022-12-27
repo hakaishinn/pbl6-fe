@@ -5,7 +5,6 @@ import { useContext } from 'react';
 import Head from 'next/head';
 
 import styles from '/styles/products/productDetail.module.scss';
-import DefaultLayout from '/layout/defaultLayout';
 import { CheckIcon } from '/components/Icons';
 import Quantity from '../quantity';
 import { AppContext } from '/context/appProvider.js';
@@ -20,7 +19,6 @@ function ProductDetail() {
     const { setCartItem, user, setIsShowLogin } = useContext(AppContext);
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
-    const [isComment, setIsComment] = useState(false);
 
     const router = useRouter();
     const id = router.query.id;
@@ -75,7 +73,7 @@ function ProductDetail() {
 
     return (
         <>
-            <Head>{product && <title>{product.name} - Hikaru Shop</title>}</Head>(
+            <Head>{product && <title>{product.name} - Hikaru Shop</title>}</Head>
             <div className="container">
                 <div className={cx('wrapper')}>
                     <div className={cx('info')}>
@@ -108,12 +106,20 @@ function ProductDetail() {
                                         <div>Số lượng</div>
                                         <Quantity product={product} parentCallback={getQuantity}></Quantity>
                                     </div>
-                                    <button className={cx('btn-buy')} onClick={handleBuy}>
-                                        MUA NGAY
-                                    </button>
-                                    <button className={cx('add-to-cart')} onClick={handleAddToCart}>
-                                        THÊM VÀO GIỎ
-                                    </button>
+                                    {product.quantity > 0 ? (
+                                        <>
+                                            <button className={cx('btn-buy')} onClick={handleBuy}>
+                                                MUA NGAY
+                                            </button>
+                                            <button className={cx('add-to-cart')} onClick={handleAddToCart}>
+                                                THÊM VÀO GIỎ
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <button className={cx('btn-buy')}>
+                                            HẾT HÀNG
+                                        </button>
+                                    )}
                                     <div className={cx('endow')}>
                                         <div>Ưu đãi dành cho khách hàng:</div>
                                         <ul>
@@ -302,39 +308,21 @@ function ProductDetail() {
                     </div>
                     {product ? (
                         <div className={cx('desc-detail')}>
-                            <button className={cx({ active: !isComment })} onClick={() => setIsComment(!isComment)}>
-                                Mô tả chi tiết
-                            </button>
-                            <button className={cx({ active: isComment })} onClick={() => setIsComment(!isComment)}>
-                                Bình luận
-                            </button>
+                            <button className={cx('active')}>Mô tả chi tiết</button>
 
                             <div className={cx('desc-detail-text')}>
-                                {isComment ? (
-                                    <div className={cx('desc-content')}>
-                                        <h3>Bình luận</h3>
-                                        <span>0 bình luận</span>
-
-                                        <div className={cx('comments')}>
-                                            <input placeholder="Viết bình luận"></input>
-                                            <button>Đăng</button>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className={cx('desc-content')}>
-                                        {product.desc?.includes(';') ? (
-                                            product.desc.split(';').map((item, index) => <p key={index}>{item}</p>)
-                                        ) : (
-                                            <p>{product.desc}</p>
-                                        )}
-                                    </div>
-                                )}
+                                <div className={cx('desc-content')}>
+                                    {product.desc?.includes(';') ? (
+                                        product.desc.split(';').map((item, index) => <p key={index}>{item}</p>)
+                                    ) : (
+                                        <p>{product.desc}</p>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     ) : undefined}
                 </div>
             </div>
-            )
         </>
     );
 }
