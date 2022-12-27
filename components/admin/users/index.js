@@ -1,35 +1,51 @@
 import classNames from 'classnames/bind';
 import styles from '/styles/admin/products.module.scss';
+import ReactPaginate from 'react-paginate';
 
 import AdminLayout from '../../../layout/adminLayout';
 import * as authServices from '/services/authServices';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 
 const cx = classNames.bind(styles);
 
 function Users() {
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState(null);
+
+    const router = useRouter();
+
+    const page = router.query.page;
+
+    const pageCount = users?.totalPage || 0;
+
+    const handlePageClick = async (event) => {
+        router.push({
+            pathname: `/admin/users`,
+            query: { page: event.selected + 1 },
+        });
+    };
 
     useEffect(() => {
         const getData = async () => {
-            const users = await authServices.getAll();
-            if (users && users.data) {
-                setUsers(users.data);
+            if (page) {
+                const users = await authServices.getAll({ page: parseInt(page), size: 9 });
+                if (users && users.data) {
+                    setUsers(users);
+                }
+            } else {
+                const users = await authServices.getAll({ page: 1, size: 9 });
+                if (users && users.data) {
+                    setUsers(users);
+                }
             }
         };
         getData();
-        console.log(users);
-    }, []);
+    }, [page]);
     return (
         <AdminLayout itemActive={'users'}>
             <div className={cx('wrapper')}>
                 <h1>Người dùng</h1>
-                <div className={cx('header')}>
-                    {/* <div className={cx('search')}>
-                        <input placeholder="Tìm kiếm..."></input>
-                        <button className={cx('btn-search')}>Tìm</button>
-                    </div> */}
-                </div>
+                <div className={cx('header')}></div>
                 <table>
                     <thead>
                         <tr>
@@ -39,12 +55,12 @@ function Users() {
                             <th width={'15%'}>Email</th>
                             <th width={'30%'}>Địa chỉ</th>
                             <th width={'15%'}>Liên hệ</th>
-                            {/* <th width={'5%'}>Thao tác</th> */}
                         </tr>
                     </thead>
                     <tbody>
-                        {users.length > 0 &&
-                            users.map((item) => (
+                        {users &&
+                            users?.data.length > 0 &&
+                            users.data.map((item) => (
                                 <tr key={item.idUser}>
                                     <td>{item.idUser}</td>
                                     <td>{item.username}</td>
@@ -52,13 +68,27 @@ function Users() {
                                     <td>{item.email}</td>
                                     <td>{item.address}</td>
                                     <td>{item.contact}</td>
-                                    {/* <td>
-                                        <button className={cx('delete')}>Xóa</button>
-                                    </td> */}
                                 </tr>
                             ))}
                     </tbody>
                 </table>
+                {users && users?.data.length > 0 ? (
+                    <ReactPaginate
+                        forcePage={page ? page - 1 : 0}
+                        breakLabel="..."
+                        nextLabel=">"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={3}
+                        pageCount={pageCount}
+                        previousLabel="<"
+                        renderOnZeroPageCount={null}
+                        containerClassName={cx('pagination')}
+                        pageLinkClassName={cx('page-num')}
+                        previousLinkClassName={cx('page-num')}
+                        nextLinkClassName={cx('page-num')}
+                        activeLinkClassName={cx('active')}
+                    />
+                ) : undefined}
             </div>
         </AdminLayout>
     );

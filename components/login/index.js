@@ -16,9 +16,12 @@ function Login() {
     const errorUsernameRef = useRef();
     const passwordRef = useRef();
     const errorPasswordRef = useRef();
-    const [isLoading, setIsLoading] = useState(false);
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    const [isLoading, setIsLoading] = useState(false);
+
     const { setIsShowLogin, setIsShowRegister, setUser } = useContext(AppContext);
 
     const handleLogin = async () => {
@@ -58,7 +61,6 @@ function Login() {
     };
 
     useEffect(() => {
-        console.log('add event');
         if (usernameRef.current) {
             usernameRef.current.addEventListener('blur', () => {
                 validator(usernameRef, errorUsernameRef, ['required']);

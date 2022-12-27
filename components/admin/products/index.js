@@ -15,8 +15,12 @@ const cx = classNames.bind(styles);
 
 function Products() {
     const router = useRouter();
+    const selectRef = useRef();
+    const paginateRef = useRef();
+    const searchRef = useRef();
 
     const page = router.query.page;
+    const name = router.query.name;
 
     const [productItem, setProductItem] = useState([]);
     const [products, setProducts] = useState([]);
@@ -24,17 +28,22 @@ function Products() {
     const [showUpdate, setShowUpdate] = useState(false);
     const [showAdd, setShowAdd] = useState(false);
     const [filter, setFilter] = useState('all');
-
-    const paginateRef = useRef();
+    const [search, setSearch] = useState('');
 
     const pageCount = products?.totalPage || 0;
 
     const handlePageClick = async (event) => {
-        console.log('change');
-        router.push({
-            pathname: `/admin/products`,
-            query: { page: event.selected + 1 },
-        });
+        if (name) {
+            router.push({
+                pathname: `/admin/products`,
+                query: { page: event.selected + 1, name: name.trim() },
+            });
+        } else {
+            router.push({
+                pathname: `/admin/products`,
+                query: { page: event.selected + 1 },
+            });
+        }
     };
 
     const handleDelete = async (id) => {
@@ -57,41 +66,70 @@ function Products() {
     }, []);
 
     const getData = async () => {
-        if (page) {
-            if (filter === 'all') {
-                const products = await productsServices.getProducts({ page: parseInt(page), size: 9 });
+        if (name) {
+            if (page) {
+                const products = await productsServices.search(name, { page: parseInt(page), size: 9 });
                 if (products) {
-                    setProducts(products);
+                    setProducts(products.data);
                 }
             } else {
-                const products = await productsServices.getProductByCategoryId(parseInt(filter), {
-                    page: parseInt(page),
-                    size: 9,
-                });
+                const products = await productsServices.search(name, { page: 1, size: 9 });
                 if (products) {
                     setProducts(products.data);
                 }
             }
-        } else if (!page) {
-            if (filter === 'all') {
-                const products = await productsServices.getProducts({ page: 1, size: 9 });
-                if (products) {
-                    setProducts(products);
+        } else {
+            if (page) {
+                if (filter === 'all') {
+                    const products = await productsServices.getProducts({ page: parseInt(page), size: 9 });
+                    if (products) {
+                        setProducts(products);
+                    }
+                } else {
+                    const products = await productsServices.getProductByCategoryId(parseInt(filter), {
+                        page: parseInt(page),
+                        size: 9,
+                    });
+                    if (products) {
+                        setProducts(products.data);
+                    }
                 }
-            } else {
-                const products = await productsServices.getProductByCategoryId(parseInt(filter), {
-                    page: 1,
-                    size: 9,
-                });
-                if (products) {
-                    setProducts(products.data);
+            } else if (!page) {
+                if (filter === 'all') {
+                    const products = await productsServices.getProducts({ page: 1, size: 9 });
+                    if (products) {
+                        setProducts(products);
+                    }
+                } else {
+                    const products = await productsServices.getProductByCategoryId(parseInt(filter), {
+                        page: 1,
+                        size: 9,
+                    });
+                    if (products) {
+                        setProducts(products.data);
+                    }
                 }
             }
         }
     };
+
+    const handleSearch = async () => {
+        if (search.trim().length === 0) return;
+        if (page) {
+            router.push({
+                pathname: `/admin/products`,
+                query: { page: page, name: search.trim() },
+            });
+        } else {
+            router.push({
+                pathname: `/admin/products`,
+                query: { page: 1, name: search.trim() },
+            });
+        }
+    };
     useEffect(() => {
         getData();
-    }, [page, filter]);
+    }, [page, filter, name]);
 
     return (
         <AdminLayout itemActive={'products'}>
@@ -118,16 +156,31 @@ function Products() {
             <div className={cx('wrapper')}>
                 <h1>Sản phẩm</h1>
                 <div className={cx('header')}>
-                    {/* <div className={cx('search')}>
-                        <input placeholder="Tìm kiếm..."></input>
-                        <button className={cx('btn-search')}>Tìm</button>
-                    </div> */}
-                    <select onChange={(e) => setFilter(e.target.value)}>
+                    <select
+                        onChange={(e) => {
+                            setSearch('')
+                            setFilter(e.target.value);
+                            router.push({
+                                pathname: `/admin/products`,
+                            });
+                        }}
+                    >
                         <option value={'all'}>Tất cả</option>
                         {categories.map((item) => (
-                            <option key={item.id} value={item.id}>{item.categoryType}</option>
+                            <option key={item.id} value={item.id}>
+                                {item.categoryType}
+                            </option>
                         ))}
                     </select>
+
+                    <div className={cx('search')}>
+                        <input
+                            value={search}
+                            placeholder="Nhập tên truyện muốn tìm..."
+                            onChange={(e) => setSearch(e.target.value)}
+                        ></input>
+                        <button onClick={handleSearch}>Tìm</button>
+                    </div>
 
                     <button onClick={() => setShowAdd(true)} className={cx('add')}>
                         Thêm

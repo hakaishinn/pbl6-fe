@@ -10,7 +10,7 @@ function Create() {
     const router = useRouter();
 
     const { price, id } = router.query;
-    const [orderDesc, setOrderDesc] = useState(`Thanh toan don hang ${id}`);
+    const [orderDesc, setOrderDesc] = useState(`Noi dung thanh toan`);
     const [bankCode, setBankCode] = useState('NCB');
     const [url, setUrl] = useState('');
 

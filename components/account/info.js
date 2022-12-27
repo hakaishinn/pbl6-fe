@@ -7,6 +7,7 @@ import { AppContext } from '/context/appProvider.js';
 import * as authServices from '/services/authServices';
 import { Loading } from '../loading';
 import validator from '/utils/validator';
+import ChangePassword from './changePassword';
 
 const cx = classNames.bind(styles);
 
@@ -15,10 +16,13 @@ function Info({ className }) {
     const errorNameRef = useRef();
     const phoneRef = useRef();
     const errorPhoneRef = useRef();
+
     const { user, setUser } = useContext(AppContext);
     const [currentUser, setCurrentUser] = useState(user);
+    const [isRef, setIsRef] = useState(true);
     const [isUpdate, setIsUpdate] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isChangePassword, setIsChangePassword] = useState(false);
 
     const handleUpdate = async () => {
         const isName = validator(nameRef, errorNameRef, ['required']);
@@ -57,6 +61,8 @@ function Info({ className }) {
                 nameRef.current.classList.remove('error');
                 errorNameRef.current.style.opacity = 0;
             });
+        } else {
+            setIsRef(false);
         }
 
         if (phoneRef.current) {
@@ -69,7 +75,7 @@ function Info({ className }) {
                 errorPhoneRef.current.style.opacity = 0;
             });
         }
-    }, [nameRef.current]);
+    }, [nameRef.current, phoneRef.current]);
 
     return (
         <div className={className}>
@@ -98,11 +104,7 @@ function Info({ className }) {
                         <p>Email:</p>
                         {isUpdate ? (
                             <p>
-                                <input
-                                    value={currentUser.email}
-                                    // onChange={(e) => setCurrentUser((prev) => ({ ...prev, email: e.target.value }))}
-                                    disabled
-                                ></input>
+                                <input value={currentUser.email} disabled></input>
                                 <span className={cx('message-error')}>Không được để trống trường này</span>
                             </p>
                         ) : (
@@ -141,20 +143,27 @@ function Info({ className }) {
                     {isUpdate ? (
                         <>
                             <button onClick={handleUpdate}>Cập nhật</button>{' '}
-                            <button className={cx('danger')} onClick={() => setIsUpdate(false)}>
+                            <button
+                                className={cx('danger')}
+                                onClick={() => {
+                                    setCurrentUser(user)
+                                    setIsUpdate(false);
+                                }}
+                            >
                                 Hủy
                             </button>
                         </>
                     ) : (
                         <div className={cx('btn-space')}>
                             <button onClick={() => setIsUpdate(true)}>Sửa</button>
-                            <button className={cx('danger')} onClick={() => {}}>
+                            <button className={cx('danger')} onClick={() => setIsChangePassword(true)}>
                                 Đổi mật khẩu
                             </button>
                         </div>
                     )}
                 </div>
             )}
+            {isChangePassword && <ChangePassword setIsChangePassword={setIsChangePassword}></ChangePassword>}
         </div>
     );
 }

@@ -37,9 +37,10 @@ function OrderDetail() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th width="33%">Mã sản phẩm</th>
-                                    <th width="33%">Số lượng</th>
-                                    <th width="33%">Thành tiền</th>
+                                    <th width="15%">Mã sản phẩm</th>
+                                    <th width="60%">Tên sản phẩm</th>
+                                    <th width="10%">Số lượng</th>
+                                    <th width="15%">Thành tiền</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -49,6 +50,9 @@ function OrderDetail() {
                                         <tr key={item.idProduct}>
                                             <td>
                                                 <Link href={`/products/${item.idProduct}`}>#{item.idProduct}</Link>
+                                            </td>
+                                            <td>
+                                                <Link href={`/products/${item.idProduct}`}>{item.nameProduct}</Link>
                                             </td>
 
                                             <td>{item.quantity}</td>
@@ -62,7 +66,7 @@ function OrderDetail() {
                                     ))}
 
                                 <tr>
-                                    <td className={cx('total')} colSpan="2">
+                                    <td className={cx('total')} colSpan="3">
                                         Tổng cộng
                                     </td>
                                     <td>

@@ -1,58 +1,78 @@
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
+import ReactPaginate from 'react-paginate';
 
 import styles from '/styles/admin/products.module.scss';
 import AdminLayout from '../../../layout/adminLayout';
 import * as orderServices from '/services/orderServices';
+import { useRouter } from 'next/router';
 
 const cx = classNames.bind(styles);
 
 function Bill() {
     const [orders, setOrders] = useState(null);
+    const [status, setStatus] = useState('all');
+    const router = useRouter();
+
+    const page = router.query.page;
+
+    const pageCount = orders?.totalPage || 0;
+
+    const handlePageClick = async (event) => {
+        router.push({
+            pathname: `/admin/bill`,
+            query: { page: event.selected + 1 },
+        });
+    };
 
     const handleChange = async (id, status) => {
         await orderServices.updateStatusOrder(parseInt(id), status);
     };
 
     const handleSort = async (e) => {
-        const orders = await orderServices.getOrders();
-        if (orders && orders.data) {
-            if (e.target.value === 'no') {
-                setOrders(orders.data);
-            } else if (e.target.value === 'Wait for pay') {
-                const resWait = orders.data.filter((item) => item.status === 'Wait for pay');
-                setOrders(resWait);
-            } else if (e.target.value === 'Paid') {
-                const resPaid = orders.data.filter((item) => item.status === 'Paid');
-                setOrders(resPaid);
-            } else if (e.target.value === 'Cancel') {
-                const resPaid = orders.data.filter((item) => item.status === 'Cancel');
-                setOrders(resPaid);
-            }
-        }
+        setStatus(e.target.value);
+        router.push({
+            pathname: `/admin/bill`,
+        });
     };
 
     useEffect(() => {
         const getData = async () => {
-            const res = await orderServices.getOrders();
-            if (res && res.data) {
-                setOrders(res.data);
+            if (status === 'all') {
+                if (page) {
+                    const res = await orderServices.getOrders({ page: page, size: 9 });
+                    if (res && res.data) {
+                        setOrders(res);
+                    }
+                } else {
+                    const res = await orderServices.getOrders({ page: 1, size: 9 });
+                    if (res && res.data) {
+                        setOrders(res);
+                    }
+                }
+            } else {
+                if (page) {
+                    const res = await orderServices.getOrders({ status: status, page: page, size: 9 });
+                    if (res && res.data) {
+                        setOrders(res);
+                    }
+                } else {
+                    const res = await orderServices.getOrders({ status: status, page: 1, size: 9 });
+                    if (res && res.data) {
+                        setOrders(res);
+                    }
+                }
             }
         };
         getData();
-    }, []);
+    }, [status, page]);
     return (
         <AdminLayout itemActive={'bill'}>
             <div className={cx('wrapper')}>
                 <h1>Đơn hàng</h1>
                 <div className={cx('header')}>
-                    {/* <div className={cx('search')}>
-                        <input placeholder="Tìm kiếm..."></input>
-                        <button className={cx('btn-search')}>Tìm</button>
-                    </div> */}
-
                     <select onChange={handleSort}>
-                        <option value={'no'}>Mặc định</option>
+                        <option value={'all'}>Mặc định</option>
                         <option value={'Wait for pay'}>Wait for pay</option>
                         <option value={'Paid'}>Paid</option>
                         <option value={'Cancel'}>Cancel</option>
@@ -66,12 +86,12 @@ function Bill() {
                             <th>Thành tiền</th>
                             <th>Ngày đặt</th>
                             <th>Trạng thái</th>
-                            {/* <th>Thao tác</th> */}
                         </tr>
                     </thead>
                     <tbody>
                         {orders &&
-                            orders.map((item) => (
+                            orders.data &&
+                            orders.data.map((item) => (
                                 <tr key={item.idOrder}>
                                     <td>{item.idOrder}</td>
                                     <td>{item.nameUser}</td>
@@ -97,14 +117,27 @@ function Bill() {
                                             </option>
                                         </select>
                                     </td>
-                                    {/* <td>
-                                        <button className={cx('update')}>Sửa</button>
-                                        <button className={cx('delete')}>Xóa</button>
-                                    </td> */}
                                 </tr>
                             ))}
                     </tbody>
                 </table>
+                {orders?.data ? (
+                    <ReactPaginate
+                        forcePage={page ? page - 1 : 0}
+                        breakLabel="..."
+                        nextLabel=">"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={3}
+                        pageCount={pageCount}
+                        previousLabel="<"
+                        renderOnZeroPageCount={null}
+                        containerClassName={cx('pagination')}
+                        pageLinkClassName={cx('page-num')}
+                        previousLinkClassName={cx('page-num')}
+                        nextLinkClassName={cx('page-num')}
+                        activeLinkClassName={cx('active')}
+                    />
+                ) : undefined}
             </div>
         </AdminLayout>
     );

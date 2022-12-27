@@ -41,9 +41,9 @@ export const getUserByUsername = async (username) => {
     }
 };
 
-export const getAll = async () => {
+export const getAll = async (params) => {
     try {
-        const res = await request.get(`auth/`);
+        const res = await request.get(`auth/`, { params });
         return res.data;
     } catch (error) {
         return undefined;
@@ -58,6 +58,25 @@ export const updateUserById = async (user) => {
             contact: user.contact,
             email: user.email,
         });
+        return res.data;
+    } catch (error) {}
+};
+
+export const changePassword = async (idUser, oldPassword, newPassword, confirmPassword) => {
+    try {
+        const res = await request.put(
+            `auth/password/${idUser}`,
+            {
+                Password: oldPassword,
+                NewPassword: newPassword,
+                RePassword: confirmPassword,
+            },
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            },
+        );
         return res.data;
     } catch (error) {}
 };

@@ -2,7 +2,7 @@ import request from '/utils/request';
 
 export const getOrders = async (params = {}) => {
     try {
-        const res = await request.get('order', { params });
+        const res = await request.get('order/status', { params });
         return res.data;
     } catch (error) {
         console.log('Loi: ', error.message);
