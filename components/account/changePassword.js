@@ -120,6 +120,7 @@ function ChangePassword({ setIsChangePassword }) {
                         <br></br>
                         <input
                             ref={oldPasswordRef}
+                            type='password'
                             placeholder="Nhập mật khẩu cũ"
                             id="oldPassword"
                             autoFocus
@@ -136,6 +137,7 @@ function ChangePassword({ setIsChangePassword }) {
                         <br></br>
                         <input
                             ref={newPasswordRef}
+                            type='password'
                             placeholder="Nhập mật khẩu mới:"
                             id="newPassword"
                             value={newPassword}
@@ -151,6 +153,7 @@ function ChangePassword({ setIsChangePassword }) {
                         <br></br>
                         <input
                             ref={confirmPasswordRef}
+                            type='password'
                             placeholder="Nhập lại mật khẩu mới:"
                             id="confirmPassword"
                             value={confirmPassword}
