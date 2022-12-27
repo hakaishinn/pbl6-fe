@@ -20,7 +20,6 @@ function Search() {
                 value={value}
                 className={'input-search'}
                 placeholder="Tìm kiếm sản phẩm mong muốn..."
-                name="search"
                 onChange={(e) => setValue(e.target.value)}
             ></input>
             <button className={cx('btn-search')} onClick={handleSearch}>
