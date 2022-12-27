@@ -1,13 +1,14 @@
-import classNames from 'classnames/bind';
 import { useContext, useEffect, useRef, useState } from 'react';
+import classNames from 'classnames/bind';
 
+import styles from '/styles/login.module.scss';
 import * as authServices from '/services/authServices';
 import * as cartServices from '/services/cartServices';
 import { CloseIcon } from '../Icons';
-import styles from '/styles/login.module.scss';
 import { AppContext } from '/context/appProvider.js';
 import { Loading } from '../loading';
 import validator from '/utils/validator';
+import ForgotPassword from '../forgotPassword';
 
 const cx = classNames.bind(styles);
 
@@ -19,6 +20,7 @@ function Login() {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [isForgot, setIsForgot] = useState(false);
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -138,7 +140,13 @@ function Login() {
                             </span>
                         </div>
                         <div className={cx('forgot-password')}>
-                            <button>Quên mật khẩu</button>
+                            <button
+                                onClick={() => {
+                                    setIsForgot(true);
+                                }}
+                            >
+                                Quên mật khẩu
+                            </button>
                         </div>
                         <button className={cx('btn-login')} onClick={handleLogin}>
                             Đăng nhập
@@ -147,6 +155,7 @@ function Login() {
                 </div>
             </div>
             {isLoading && <Loading isOverlay></Loading>}
+            {isForgot && <ForgotPassword setIsForgot={setIsForgot}></ForgotPassword>}
         </>
     );
 }

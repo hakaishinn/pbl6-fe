@@ -80,3 +80,13 @@ export const changePassword = async (idUser, oldPassword, newPassword, confirmPa
         return res.data;
     } catch (error) {}
 };
+
+
+export const sendPasswordToEmail = async (email) => {
+    try {
+        const res = await request.get(`vnpay/send/${email}`);
+        return res.data;
+    } catch (error) {
+        return undefined;
+    }
+};
