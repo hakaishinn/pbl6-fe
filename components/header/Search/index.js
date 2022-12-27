@@ -7,19 +7,21 @@ import styles from '/styles/header/search.module.scss';
 
 const cx = classNames.bind(styles);
 function Search() {
-    const router = useRouter()
+    const router = useRouter();
     const [value, setValue] = useState('');
     const handleSearch = () => {
-        if(value.length > 0){
-            router.push(`/search/${encodeURI(value.trim())}`)
+        if (value.length > 0) {
+            router.push(`/search/${encodeURI(value.trim())}`);
         }
-    }
+    };
     return (
         <div className={cx('search')}>
             <input
+                autoComplete="off"
                 value={value}
                 className={'input-search'}
                 placeholder="Tìm kiếm sản phẩm mong muốn..."
+                name="search"
                 onChange={(e) => setValue(e.target.value)}
             ></input>
             <button className={cx('btn-search')} onClick={handleSearch}>

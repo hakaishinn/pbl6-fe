@@ -7,7 +7,7 @@ import { useEffect, useState, useContext } from 'react';
 
 const cx = classNames.bind(styles);
 function Account() {
-    const { user, setIsShowLogin } = useContext(AppContext);
+    const { user } = useContext(AppContext);
 
     const [currentUser, setCurrentUser] = useState(user);
 
